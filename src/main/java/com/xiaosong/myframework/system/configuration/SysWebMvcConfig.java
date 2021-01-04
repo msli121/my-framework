@@ -20,6 +20,7 @@ import java.util.List;
  */
 @Configuration
 public class SysWebMvcConfig implements WebMvcConfigurer {
+
     /**
      * 静态资源配置
      * @param registry

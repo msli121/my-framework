@@ -1,8 +1,7 @@
 package com.xiaosong.myframework.business.controller;
 
 import com.xiaosong.myframework.business.entity.Book;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -17,6 +16,7 @@ import java.util.List;
 
 @RestController
 public class TestController {
+
     @GetMapping("/books")
     public ModelAndView getBooks() {
         List<Book> books = new ArrayList<>();
@@ -46,5 +46,15 @@ public class TestController {
         book.setAuthor("霍金");
         book.setPublicationDate(new Date());
         return book;
+    }
+
+    @PostMapping("/book")
+    public String addBook(String name) {
+        return "receive" + name;
+    }
+
+    @DeleteMapping("/book/{id}")
+    public String deleteBookById(@PathVariable Integer id) {
+        return String.valueOf(id);
     }
 }
