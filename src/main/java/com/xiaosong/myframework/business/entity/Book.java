@@ -15,6 +15,7 @@ public class Book {
     private Integer id;
     private String name;
     private String author;
+    private Float price;
     private Date publicationDate;
 
     @Id
@@ -43,6 +44,15 @@ public class Book {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    @Column(name = "price", precision = 8, scale = 2)
+    public Float getPrice() {
+        return price;
+    }
+
+    public void setPrice(Float price) {
+        this.price = price;
     }
 
     @Column(name = "publication_date", nullable = true)
