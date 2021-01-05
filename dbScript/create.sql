@@ -1,0 +1,1 @@
+create database `xiaosong` default character set utf8;
