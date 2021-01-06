@@ -1,5 +1,5 @@
 server:
-  port:
+  port: 8888
   servlet:
     context-path: /
   tomcat:
@@ -36,4 +36,12 @@ spring:
       ddl-auto: update
     properties:
       dialect: org.hibernate.dialect.MySQL57Dialect
+  security:
+    user:
+      name: xiaosong
+      password: 2.71828
+      roles: admin
+
+
+
 
