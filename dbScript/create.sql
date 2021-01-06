@@ -1,9 +1,10 @@
+drop database if exists `xiaosong`;
 create database `xiaosong` default character set utf8;
 
 drop table if exists `role`;
 create table `role` (
     `id` int(11) not null auto_increment primary key,
-    `role_name` varchar(255) not null,
+    `role_name` varchar(255) not null unique,
     `description` varchar(255) default null
 ) ENGINE=InnoDB auto_increment=1 default charset=utf8;
 
