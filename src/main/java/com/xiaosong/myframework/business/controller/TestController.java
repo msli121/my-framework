@@ -1,6 +1,13 @@
 package com.xiaosong.myframework.business.controller;
 
+import com.xiaosong.myframework.business.entity.ApiResult;
+import com.xiaosong.myframework.business.entity.Book;
+import com.xiaosong.myframework.business.entity.User;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
+
+import java.util.Date;
+import java.util.Objects;
 
 /**
  * @Description
@@ -11,36 +18,30 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class TestController {
 
-//    @GetMapping("/books")
-//    public ModelAndView getBooks() {
-//        List<Book> books = new ArrayList<>();
-//        Book book = new Book();
-//        book.setId(1);
-//        book.setName("《时间简史》");
-//        book.setAuthor("霍金");
-//        book.setPublicationDate(new Date());
-//        books.add(book);
-//        Book book1 = new Book();
-//        book1.setId(1);
-//        book1.setName("《西游记》");
-//        book1.setAuthor("吴承恩");
-//        book1.setPublicationDate(new Date());
-//        books.add(book1);
-//        ModelAndView mv = new ModelAndView();
-//        mv.addObject("books", books);
-//        mv.setViewName("books");
-//        return mv;
-//    }
+    @PostMapping(value = "/api/login")
+    public ApiResult login(@RequestBody User requestUser) {
+        // 对 html 标签进行转义，防止 XSS 攻击
+        String username = requestUser.getUsername();
+        username = HtmlUtils.htmlEscape(username);
 
-//    @GetMapping("/book")
-//    public Book getBook() {
-//        Book book = new Book();
-//        book.setId(1);
-//        book.setName("《时间简史》");
-//        book.setAuthor("霍金");
-//        book.setPublicationDate(new Date());
-//        return book;
-//    }
+        if (!Objects.equals("admin", username) || !Objects.equals("123456", requestUser.getPassword())) {
+            String message = "账号密码错误";
+            System.out.println("test");
+            return new ApiResult(400);
+        } else {
+            return new ApiResult(200);
+        }
+    }
+
+    @GetMapping("/book")
+    public Book getBook() {
+        Book book = new Book();
+        book.setId(1);
+        book.setName("《时间简史》");
+        book.setAuthor("霍金");
+        book.setPublicationDate(new Date());
+        return book;
+    }
 
     @PostMapping("/book")
     public String addBook(String name) {
