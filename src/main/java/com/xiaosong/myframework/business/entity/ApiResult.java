@@ -1,18 +1,34 @@
 package com.xiaosong.myframework.business.entity;
 
 public class ApiResult {
-    //响应码
-    private int code;
+    private String flag;
+    private String code;
+    private String msg;
+    private Object data;
 
-    public ApiResult(int code) {
+    public ApiResult(String flag, String code, String msg, Object data) {
+        this.flag = flag;
         this.code = code;
+        this.msg = msg;
+        this.data = data;
     }
-
-    public int getCode() {
-        return code;
+    public static ApiResult newInstance(String flag, String code, String msg, Object data){
+        ApiResult apiResult = new ApiResult(flag, code, msg, data );
+        return apiResult;
     }
-
-    public void setCode(int code) {
-        this.code = code;
+    public static ApiResult newInstance(String flag, String code, String msg){
+        return newInstance(flag, code, msg, null);
+    }
+    public static ApiResult T(){
+        return newInstance("T", "", "", null);
+    }
+    public static ApiResult T(Object data){
+        return newInstance("T", "", "", data);
+    }
+    public static ApiResult F(){
+        return newInstance("F", "", "", null);
+    }
+    public static ApiResult F(String errorCode, String errorInfo){
+        return newInstance("F", errorCode, errorInfo, null);
     }
 }

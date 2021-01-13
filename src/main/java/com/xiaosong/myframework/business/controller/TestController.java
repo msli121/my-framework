@@ -2,7 +2,6 @@ package com.xiaosong.myframework.business.controller;
 
 import com.xiaosong.myframework.business.entity.ApiResult;
 import com.xiaosong.myframework.business.entity.Book;
-import com.xiaosong.myframework.business.entity.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
 
@@ -18,20 +17,19 @@ import java.util.Objects;
 @RestController
 public class TestController {
 
-    @PostMapping(value = "/api/login")
-    public ApiResult login(@RequestBody User requestUser) {
-        // 对 html 标签进行转义，防止 XSS 攻击
-        String username = requestUser.getUsername();
-        username = HtmlUtils.htmlEscape(username);
-
-        if (!Objects.equals("admin", username) || !Objects.equals("123456", requestUser.getPassword())) {
-            String message = "账号密码错误";
-            System.out.println("test");
-            return new ApiResult(400);
-        } else {
-            return new ApiResult(200);
-        }
-    }
+//    @PostMapping(value = "/api/login")
+//    public ApiResult login(@RequestBody User requestUser) {
+//        // 对 html 标签进行转义，防止 XSS 攻击
+//        String username = requestUser.getUsername();
+//        username = HtmlUtils.htmlEscape(username);
+//        if (!Objects.equals("admin", username) || !Objects.equals("123456", requestUser.getPassword())) {
+//            String message = "账号密码错误";
+//            System.out.println(message);
+//            return new ApiResult(400);
+//        } else {
+//            return new ApiResult(200);
+//        }
+//    }
 
     @GetMapping("/book")
     public Book getBook() {

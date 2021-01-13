@@ -58,13 +58,4 @@ public class SysWebMvcConfig implements WebMvcConfigurer {
 
         converters.add(converter);
     }
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("*")
-                .allowedHeaders("*")
-                .allowedMethods("*")
-                .maxAge(1800)
-                .allowedOrigins("*");
-    }
 }
