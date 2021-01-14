@@ -25,6 +25,24 @@ create table `t_user_role` (
     `role_id` int(11) not null
 ) ENGINE=InnoDB auto_increment=1 default charset=utf8;
 
+drop table if exists `t_menu`;
+create table `t_menu` (
+    `id` int(11) not null auto_increment primary key,
+    `path` varchar(255) default '',
+    `name` varchar(255) default '',
+    `name_zh` varchar(255) default '',
+    `icon` varchar(255) default '',
+    `component` varchar(255) default '',
+    `parent_id` int(11)
+)  ENGINE=InnoDB auto_increment=1 default charset=utf8;
+
+drop table if exists `t_role_menu`;
+create table `t_role_menu` (
+    `id` int(11) not null auto_increment primary key,
+    `role_id` int(11) not null,
+    `menu_id` int(11) not null
+) ENGINE=InnoDB auto_increment=1 default charset=utf8;
+
 insert into t_role(role_name, description) values ('role_admin', '管理员角色');
 insert into t_role(role_name, description) values ('role_dba', '数据库操作员角色');
 insert into t_role(role_name, description) values ('role_user', '普通用户角色');

@@ -11,10 +11,8 @@ import org.springframework.stereotype.Service;
  * @Date 2021/01/13
  */
 
-@Service
-public class UserService {
-    @Autowired
-    UserDao userDao;
+@Service("userService")
+public class UserService extends BaseService {
 
     public boolean isExist(String username) {
         UserEntity user = this.getByUsername(username);
