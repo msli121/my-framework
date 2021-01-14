@@ -34,7 +34,7 @@ public class LoginController {
         Subject subject = SecurityUtils.getSubject();
         subject.getSession().setTimeout(10000);
         UsernamePasswordToken token = new UsernamePasswordToken(username, requestUser.getPassword());
-
+        token.setRememberMe(true);
         try {
             subject.login(token);
             return ApiResult.T("400", "登录成功");
@@ -66,6 +66,11 @@ public class LoginController {
         user.setPassword(encodedPassword);
         userService.add(user);
         return ApiResult.T("200", "注册成功");
+    }
+
+    @GetMapping(value = "/authentication")
+    public ApiResult authentication(){
+        return ApiResult.T("200", "身份认证成功");
     }
 
     @GetMapping("/logout")
