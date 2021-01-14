@@ -3,16 +3,18 @@ package com.xiaosong.myframework.business.controller;
 import com.xiaosong.myframework.business.entity.ApiResult;
 import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.service.UserService;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
 
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 
 /**
  * @Description
@@ -27,19 +29,18 @@ public class LoginController {
     UserService userService;
 
     @PostMapping(value = "/login")
-    public ApiResult login(@RequestBody UserEntity requestUser, HttpSession session) {
+    public ApiResult login(@RequestBody UserEntity requestUser) {
         String username = requestUser.getUsername();
-        username = HtmlUtils.htmlEscape(username);
+        Subject subject = SecurityUtils.getSubject();
+        subject.getSession().setTimeout(10000);
+        UsernamePasswordToken token = new UsernamePasswordToken(username, requestUser.getPassword());
 
-        UserEntity user = userService.getByUsernameAndPassword(username, requestUser.getPassword());
-        if (null == user) {
-            String message = "账号密码错误";
-            System.out.println(message);
-            return ApiResult.T(400);
-        } else {
-            System.out.println("密码正确！");
-            session.setAttribute("user", user);
-            return ApiResult.T(200);
+        try {
+            subject.login(token);
+            return ApiResult.T("400", "登录成功");
+        } catch (AuthenticationException e) {
+            String message = "账号或密码错误";
+            return ApiResult.F("200", message);
         }
     }
 
@@ -52,7 +53,7 @@ public class LoginController {
         boolean exist = userService.isExist(username);
         if (exist) {
             String message = "用户名已被使用";
-            return ApiResult.F("001", message);
+            return ApiResult.F("400", message);
         }
         // 生成盐,默认长度16位
         String salt = new SecureRandomNumberGenerator().nextBytes().toString();
@@ -64,6 +65,14 @@ public class LoginController {
         user.setSalt(salt);
         user.setPassword(encodedPassword);
         userService.add(user);
-        return ApiResult.T();
+        return ApiResult.T("200", "注册成功");
+    }
+
+    @GetMapping("/logout")
+    public ApiResult logout() {
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        String message = "成功登出";
+        return ApiResult.T("200", message);
     }
 }

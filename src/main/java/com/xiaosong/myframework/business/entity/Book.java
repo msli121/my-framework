@@ -3,6 +3,7 @@ package com.xiaosong.myframework.business.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +12,8 @@ import java.util.Date;
  * @Date 2021/01/04
  */
 @Entity(name = "t_book")
-public class Book {
+@Table(name = "t_book", schema = "xiaosong", catalog = "")
+public class Book implements Serializable {
     private Integer id;
     private String name;
     private String author;

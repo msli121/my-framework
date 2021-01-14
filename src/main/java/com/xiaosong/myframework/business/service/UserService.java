@@ -17,11 +17,11 @@ public class UserService {
     UserDao userDao;
 
     public boolean isExist(String username) {
-        UserEntity user = this.getByName(username);
+        UserEntity user = this.getByUsername(username);
         return null!=user;
     }
 
-    public UserEntity getByName(String username) {
+    public UserEntity getByUsername(String username) {
         return userDao.findByUsername(username);
     }
 

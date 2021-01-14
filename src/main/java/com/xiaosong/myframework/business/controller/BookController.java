@@ -1,13 +1,16 @@
 package com.xiaosong.myframework.business.controller;
 
+import com.xiaosong.myframework.business.entity.ApiResult;
 import com.xiaosong.myframework.business.entity.Book;
 import com.xiaosong.myframework.business.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -18,6 +21,7 @@ import java.util.Random;
  * @Date 2021/01/05
  */
 @RestController
+@RequestMapping("/api")
 public class BookController {
     @Autowired
     BookService bookService;
@@ -31,7 +35,7 @@ public class BookController {
     }
 
     @GetMapping("/add")
-    public String add() {
+    public ApiResult add() {
         Random random = new Random();
         Book book = new Book();
         book.setAuthor("xiaosong");
@@ -40,6 +44,6 @@ public class BookController {
         book.setPublicationDate(new Date());
         bookService.addBook(book);
         System.out.println("----------------" + book.getId() + " 保存成功！");
-        return String.format("-----------%s:保存成功", book.getId());
+        return new ApiResult("T", "200", "ssss", book);
     }
 }

@@ -1,6 +1,7 @@
 package com.xiaosong.myframework.business.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -11,13 +12,13 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "t_user", schema = "xiaosong", catalog = "")
-public class UserEntity {
+public class UserEntity implements Serializable {
     private int id;
     private String username;
     private String password;
     private String salt;
-    private Byte enabled;
-    private Byte locked;
+    private Byte enabled = 1;
+    private Byte locked = 0;
 
     @Id
     @Column(name = "id")

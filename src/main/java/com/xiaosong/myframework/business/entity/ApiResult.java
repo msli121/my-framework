@@ -1,6 +1,11 @@
 package com.xiaosong.myframework.business.entity;
 
-public class ApiResult {
+import lombok.Data;
+
+import java.io.Serializable;
+
+@Data
+public class ApiResult implements Serializable {
     private String flag;
     private String code;
     private String msg;
@@ -12,6 +17,7 @@ public class ApiResult {
         this.msg = msg;
         this.data = data;
     }
+
     public static ApiResult newInstance(String flag, String code, String msg, Object data){
         ApiResult apiResult = new ApiResult(flag, code, msg, data );
         return apiResult;
@@ -25,10 +31,19 @@ public class ApiResult {
     public static ApiResult T(Object data){
         return newInstance("T", "", "", data);
     }
+
+    public static ApiResult T(String code, String msg){
+        return newInstance("T", code, msg, null);
+    }
+
+    public static ApiResult T(String code, String msg, Object data) {
+        return newInstance("T", code, msg, data);
+    }
     public static ApiResult F(){
         return newInstance("F", "", "", null);
     }
     public static ApiResult F(String errorCode, String errorInfo){
         return newInstance("F", errorCode, errorInfo, null);
     }
+
 }

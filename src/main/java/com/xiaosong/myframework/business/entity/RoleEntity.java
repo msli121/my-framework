@@ -1,6 +1,7 @@
 package com.xiaosong.myframework.business.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "t_role", schema = "xiaosong", catalog = "")
-public class RoleEntity {
+public class RoleEntity implements Serializable {
     private int id;
     private String roleName;
     private String description;
