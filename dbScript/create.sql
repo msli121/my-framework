@@ -58,6 +58,14 @@ insert into t_user_role(user_id, role_id) values (3, 1);
 insert into t_user_role(user_id, role_id) values (3, 2);
 insert into t_user_role(user_id, role_id) values (3, 3);
 
+insert into t_menu(path, name, name_zh, icon, component, parent_id) values ('/admin', 'admin', '用户管理', 'el-icon-user', 'adminIndex', 0);
+insert into t_menu(path, name, name_zh, icon, component, parent_id) values ('/admin/user/basic', null, '用户信息', null, 'userBasic', 1);
+insert into t_menu(path, name, name_zh, icon, component, parent_id) values ('/admin/user/role', null, '角色配置', null, 'userRole', 1);
+insert into t_menu(path, name, name_zh, icon, component, parent_id) values ('/admin', 'config', '系统配置', 'el-icon-s-tools', 'adminIndex', 0);
+
+
+
+
 
 
 

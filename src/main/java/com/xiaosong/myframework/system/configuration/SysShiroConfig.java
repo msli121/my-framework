@@ -27,7 +27,6 @@ public class SysShiroConfig {
         return new LifecycleBeanPostProcessor();
     }
 
-
     @Bean(name = "shiroFilterFactoryBean")
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
@@ -36,10 +35,11 @@ public class SysShiroConfig {
     }
 
     @Bean
-    public SessionsSecurityManager sysSecurityManager() {
-        DefaultWebSecurityManager sysSecurityManager = new DefaultWebSecurityManager();
-        sysSecurityManager.setRealm(getSysRealm());
-        return sysSecurityManager;
+    public SessionsSecurityManager securityManager() {
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        securityManager.setRealm(getSysRealm());
+        securityManager.setRememberMeManager(rememberMeManager());
+        return securityManager;
     }
 
     @Bean
@@ -47,6 +47,20 @@ public class SysShiroConfig {
         SysRealm sysRealm = new SysRealm();
         sysRealm.setCredentialsMatcher(hashedCredentialsMatcher());
         return sysRealm;
+    }
+
+    public CookieRememberMeManager rememberMeManager() {
+        CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
+        cookieRememberMeManager.setCookie(rememberMeCookie());
+        cookieRememberMeManager.setCipherKey("EVANNIGHTLY_WAOU".getBytes());
+        return cookieRememberMeManager;
+    }
+
+    @Bean
+    public SimpleCookie rememberMeCookie() {
+        SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
+        simpleCookie.setMaxAge(259200);
+        return simpleCookie;
     }
 
     @Bean
@@ -64,16 +78,5 @@ public class SysShiroConfig {
         return authorizationAttributeSourceAdvisor;
     }
 
-    public CookieRememberMeManager rememberMeManager() {
-        CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
-        cookieRememberMeManager.setCookie(rememberMeCookie());
-        cookieRememberMeManager.setCipherKey("EVANNIGHTLY_WAOU".getBytes());
-        return cookieRememberMeManager;
-    }
 
-    public SimpleCookie rememberMeCookie() {
-        SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
-        simpleCookie.setMaxAge(259200);
-        return simpleCookie;
-    }
 }

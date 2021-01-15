@@ -37,10 +37,10 @@ public class LoginController {
         token.setRememberMe(true);
         try {
             subject.login(token);
-            return ApiResult.T("400", "登录成功");
+            return ApiResult.T("200", "登录成功");
         } catch (AuthenticationException e) {
             String message = "账号或密码错误";
-            return ApiResult.F("200", message);
+            return ApiResult.F("400", message);
         }
     }
 

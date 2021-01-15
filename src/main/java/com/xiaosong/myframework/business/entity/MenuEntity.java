@@ -14,6 +14,7 @@ public class MenuEntity {
     private String icon;
     private String component;
     private Integer parentId;
+
     @Transient
     private List<MenuEntity> children;
 
@@ -88,6 +89,7 @@ public class MenuEntity {
         this.parentId = parentId;
     }
 
+    @Transient
     public List<MenuEntity> getChildren() {
         return children;
     }

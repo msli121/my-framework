@@ -5,7 +5,6 @@ import com.xiaosong.myframework.business.repository.RoleMenuDao;
 import com.xiaosong.myframework.business.repository.UserDao;
 import com.xiaosong.myframework.business.repository.UserRoleDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 public class BaseService {
 
@@ -20,4 +19,5 @@ public class BaseService {
 
     @Autowired
     protected UserRoleDao userRoleDao;
+
 }
