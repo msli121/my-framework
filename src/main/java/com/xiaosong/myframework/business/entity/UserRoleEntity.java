@@ -1,21 +1,15 @@
 package com.xiaosong.myframework.business.entity;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Objects;
-
-/**
- * @Description
- * @Author msli
- * @Date 2021/01/13
- */
 
 @Entity
 @Table(name = "t_user_role", schema = "xiaosong", catalog = "")
-public class UserRoleEntity implements Serializable {
+public class UserRoleEntity {
     private int id;
     private int userId;
-    private int roleId;
+    private String roleCode;
+    private String description;
 
     @Id
     @Column(name = "id")
@@ -39,13 +33,23 @@ public class UserRoleEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "role_id")
-    public int getRoleId() {
-        return roleId;
+    @Column(name = "role_code")
+    public String getRoleCode() {
+        return roleCode;
     }
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
+    }
+
+    @Basic
+    @Column(name = "description")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -53,13 +57,11 @@ public class UserRoleEntity implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserRoleEntity that = (UserRoleEntity) o;
-        return id == that.id &&
-                userId == that.userId &&
-                roleId == that.roleId;
+        return id == that.id && userId == that.userId && Objects.equals(roleCode, that.roleCode) && Objects.equals(description, that.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, roleId);
+        return Objects.hash(id, userId, roleCode, description);
     }
 }

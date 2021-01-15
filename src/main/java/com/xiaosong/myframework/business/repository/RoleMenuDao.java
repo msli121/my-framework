@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface RoleMenuDao extends JpaRepository<RoleMenuEntity, Integer> {
 
-    List<RoleMenuEntity> findAllByRoleId(int roleId);
+    List<RoleMenuEntity> findAllByRoleCode(String roleCode);
 
-    @Query("select t.menuId from RoleMenuEntity t where t.roleId in ?1")
-    List<Integer> findMenuIdsByRoleIds(List<Integer> roleIds);
+    @Query("select distinct t.menuCode from RoleMenuEntity t where t.roleCode in ?1")
+    List<String> getAllMenuCodeByRoleCode(List<String> roleCodeList);
 
-    void deleteAllByRoleId(int roleId);
+    void deleteAllByRoleCode(String roleCode);
 
 }

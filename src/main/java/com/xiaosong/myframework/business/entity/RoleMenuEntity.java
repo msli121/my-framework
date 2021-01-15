@@ -7,8 +7,9 @@ import java.util.Objects;
 @Table(name = "t_role_menu", schema = "xiaosong", catalog = "")
 public class RoleMenuEntity {
     private int id;
-    private int roleId;
-    private int menuId;
+    private String roleCode;
+    private String menuCode;
+    private String description;
 
     @Id
     @Column(name = "id")
@@ -22,23 +23,33 @@ public class RoleMenuEntity {
     }
 
     @Basic
-    @Column(name = "role_id")
-    public int getRoleId() {
-        return roleId;
+    @Column(name = "role_code")
+    public String getRoleCode() {
+        return roleCode;
     }
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
     }
 
     @Basic
-    @Column(name = "menu_id")
-    public int getMenuId() {
-        return menuId;
+    @Column(name = "menu_code")
+    public String getMenuCode() {
+        return menuCode;
     }
 
-    public void setMenuId(int menuId) {
-        this.menuId = menuId;
+    public void setMenuCode(String menuCode) {
+        this.menuCode = menuCode;
+    }
+
+    @Basic
+    @Column(name = "description")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -46,11 +57,11 @@ public class RoleMenuEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RoleMenuEntity that = (RoleMenuEntity) o;
-        return id == that.id && roleId == that.roleId && menuId == that.menuId;
+        return id == that.id && Objects.equals(roleCode, that.roleCode) && Objects.equals(menuCode, that.menuCode) && Objects.equals(description, that.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, roleId, menuId);
+        return Objects.hash(id, roleCode, menuCode, description);
     }
 }

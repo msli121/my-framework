@@ -5,6 +5,7 @@ import com.xiaosong.myframework.business.entity.RoleMenuEntity;
 import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.entity.UserRoleEntity;
 import com.xiaosong.myframework.business.repository.MenuDao;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,29 +19,30 @@ public class MenuService extends BaseService{
     @Autowired
     public UserService userService;
 
-    public List<MenuEntity> getAllByParentId(int parentId) {
-        return menuDao.findAllByParentId(parentId);
+    public List<MenuEntity> getAllByParentMenuCode(String parentMenuCode) {
+        return menuDao.findAllByParentMenuCode(parentMenuCode);
     }
 
     public List<MenuEntity> getMenusFromCurrentUser() {
         String username = SecurityUtils.getSubject().getPrincipal().toString();
         UserEntity user = userDao.findByUsername(username);
-        // 查询用户所有角色的id
-        List<Integer>  roleIds =  userRoleDao.findAllByUserId(user.getId())
-                .stream().map(UserRoleEntity::getRoleId).collect(Collectors.toList());
-        // 查询角色所具有的菜单id
-        List<Integer> menuIds = roleMenuDao.findMenuIdsByRoleIds(roleIds);
-        List<MenuEntity> menus = menuDao.findAllById(menuIds).stream().distinct().collect(Collectors.toList());
+        // find all roleCode from current user
+        List<String>  roleCodeList =  userRoleDao.findAllByUserId(user.getId())
+                .stream().map(UserRoleEntity::getRoleCode).collect(Collectors.toList());
+        // find all menuCode from current user
+        List<String> menuCodeList = roleMenuDao.getAllMenuCodeByRoleCode(roleCodeList);
+        List<MenuEntity> menus = menuDao.findByMenuCodeIn(menuCodeList).stream()
+                .distinct().collect(Collectors.toList());
 
         adjustMenuStruct(menus);
 
         return menus;
     }
 
-    public List<MenuEntity> getMenuByRoleId(int roleId) {
-        List<Integer> menuIds = roleMenuDao.findAllByRoleId(roleId)
-                .stream().map(RoleMenuEntity::getMenuId).collect(Collectors.toList());
-        List<MenuEntity> menus = menuDao.findAllById(menuIds);
+    public List<MenuEntity> getMenuByRoleCode(String roleCode) {
+        List<String> menuCodeList = roleMenuDao.findAllByRoleCode(roleCode)
+                .stream().map(RoleMenuEntity::getMenuCode).collect(Collectors.toList());
+        List<MenuEntity> menus = menuDao.findByMenuCodeIn(menuCodeList);
 
         adjustMenuStruct(menus);
         return menus;
@@ -52,10 +54,10 @@ public class MenuService extends BaseService{
      */
     public void adjustMenuStruct(List<MenuEntity> menus) {
         menus.forEach(item -> {
-            List<MenuEntity> children = getAllByParentId(item.getId());
+            List<MenuEntity> children = getAllByParentMenuCode(item.getMenuCode());
             item.setChildren(children);
         });
-        menus.removeIf(item -> item.getParentId() != 0);
+        menus.removeIf(item -> StringUtils.isNotEmpty(item.getParentMenuCode()));
     }
 
 }

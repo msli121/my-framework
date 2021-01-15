@@ -8,15 +8,15 @@ import java.util.Objects;
 @Table(name = "t_menu", schema = "xiaosong", catalog = "")
 public class MenuEntity {
     private int id;
+    private String menuCode;
     private String path;
     private String name;
     private String nameZh;
     private String icon;
     private String component;
-    private Integer parentId;
-
-    @Transient
-    private List<MenuEntity> children;
+    private String parentMenuCode;
+    private String description;
+    List<MenuEntity> children;
 
     @Id
     @Column(name = "id")
@@ -27,6 +27,16 @@ public class MenuEntity {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Basic
+    @Column(name = "menu_code")
+    public String getMenuCode() {
+        return menuCode;
+    }
+
+    public void setMenuCode(String menuCode) {
+        this.menuCode = menuCode;
     }
 
     @Basic
@@ -80,13 +90,23 @@ public class MenuEntity {
     }
 
     @Basic
-    @Column(name = "parent_id")
-    public Integer getParentId() {
-        return parentId;
+    @Column(name = "parent_menu_code")
+    public String getParentMenuCode() {
+        return parentMenuCode;
     }
 
-    public void setParentId(Integer parentId) {
-        this.parentId = parentId;
+    public void setParentMenuCode(String parentMenuCode) {
+        this.parentMenuCode = parentMenuCode;
+    }
+
+    @Basic
+    @Column(name = "description")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Transient
@@ -103,11 +123,11 @@ public class MenuEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MenuEntity that = (MenuEntity) o;
-        return id == that.id && Objects.equals(path, that.path) && Objects.equals(name, that.name) && Objects.equals(nameZh, that.nameZh) && Objects.equals(icon, that.icon) && Objects.equals(component, that.component) && Objects.equals(parentId, that.parentId);
+        return id == that.id && Objects.equals(menuCode, that.menuCode) && Objects.equals(path, that.path) && Objects.equals(name, that.name) && Objects.equals(nameZh, that.nameZh) && Objects.equals(icon, that.icon) && Objects.equals(component, that.component) && Objects.equals(parentMenuCode, that.parentMenuCode) && Objects.equals(description, that.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, path, name, nameZh, icon, component, parentId);
+        return Objects.hash(id, menuCode, path, name, nameZh, icon, component, parentMenuCode, description);
     }
 }

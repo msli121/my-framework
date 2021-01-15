@@ -10,6 +10,10 @@ public interface MenuDao extends JpaRepository<MenuEntity, Integer> {
 
     MenuEntity findById(int id);
 
-    List<MenuEntity> findAllByParentId(int parentId);
+    List<MenuEntity> findAllByParentMenuCode(String parentMenuCode);
+
+    List<MenuEntity> findByMenuCodeIn(List<String> menuCodes);
+
+    MenuEntity findByMenuCode(String menuCode);
 
 }

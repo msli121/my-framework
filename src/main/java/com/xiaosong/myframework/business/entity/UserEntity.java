@@ -1,24 +1,18 @@
 package com.xiaosong.myframework.business.entity;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Objects;
-
-/**
- * @Description
- * @Author msli
- * @Date 2021/01/13
- */
 
 @Entity
 @Table(name = "t_user", schema = "xiaosong", catalog = "")
-public class UserEntity implements Serializable {
+public class UserEntity {
     private int id;
     private String username;
     private String password;
+    private String phone;
     private String salt;
-    private Byte enabled = 1;
-    private Byte locked = 0;
+    private Byte enabled;
+    private Byte locked;
 
     @Id
     @Column(name = "id")
@@ -49,6 +43,16 @@ public class UserEntity implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Basic
+    @Column(name = "phone")
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     @Basic
@@ -86,15 +90,11 @@ public class UserEntity implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UserEntity that = (UserEntity) o;
-        return id == that.id &&
-                Objects.equals(username, that.username) &&
-                Objects.equals(password, that.password) &&
-                Objects.equals(enabled, that.enabled) &&
-                Objects.equals(locked, that.locked);
+        return id == that.id && Objects.equals(username, that.username) && Objects.equals(password, that.password) && Objects.equals(phone, that.phone) && Objects.equals(salt, that.salt) && Objects.equals(enabled, that.enabled) && Objects.equals(locked, that.locked);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, password, enabled, locked);
+        return Objects.hash(id, username, password, phone, salt, enabled, locked);
     }
 }

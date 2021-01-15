@@ -1,19 +1,13 @@
 package com.xiaosong.myframework.business.entity;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Objects;
-
-/**
- * @Description
- * @Author msli
- * @Date 2021/01/13
- */
 
 @Entity
 @Table(name = "t_role", schema = "xiaosong", catalog = "")
-public class RoleEntity implements Serializable {
+public class RoleEntity {
     private int id;
+    private String roleCode;
     private String roleName;
     private String description;
 
@@ -26,6 +20,16 @@ public class RoleEntity implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Basic
+    @Column(name = "role_code")
+    public String getRoleCode() {
+        return roleCode;
+    }
+
+    public void setRoleCode(String roleCode) {
+        this.roleCode = roleCode;
     }
 
     @Basic
@@ -53,13 +57,11 @@ public class RoleEntity implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RoleEntity that = (RoleEntity) o;
-        return id == that.id &&
-                Objects.equals(roleName, that.roleName) &&
-                Objects.equals(description, that.description);
+        return id == that.id && Objects.equals(roleCode, that.roleCode) && Objects.equals(roleName, that.roleName) && Objects.equals(description, that.description);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, roleName, description);
+        return Objects.hash(id, roleCode, roleName, description);
     }
 }
