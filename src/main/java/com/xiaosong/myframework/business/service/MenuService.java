@@ -23,6 +23,10 @@ public class MenuService extends BaseService{
         return menuDao.findAllByParentMenuCode(parentMenuCode);
     }
 
+    public List<MenuEntity> getAllMenus() {
+        return menuDao.findAll();
+    }
+
     public List<MenuEntity> getMenusFromCurrentUser() {
         String username = SecurityUtils.getSubject().getPrincipal().toString();
         UserEntity user = userDao.findByUsername(username);

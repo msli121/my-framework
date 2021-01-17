@@ -1,12 +1,16 @@
 package com.xiaosong.myframework.business.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "t_menu", schema = "xiaosong", catalog = "")
-public class MenuEntity {
+public class MenuEntity implements Serializable {
+    @Transient
+    private static final long serialVersionUID = 1L;
+
     private int id;
     private String menuCode;
     private String path;

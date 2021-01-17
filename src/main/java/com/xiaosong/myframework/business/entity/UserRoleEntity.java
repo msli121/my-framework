@@ -1,11 +1,15 @@
 package com.xiaosong.myframework.business.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "t_user_role", schema = "xiaosong", catalog = "")
-public class UserRoleEntity {
+public class UserRoleEntity implements Serializable {
+    @Transient
+    private static final long serialVersionUID = 1L;
+
     private int id;
     private int userId;
     private String roleCode;

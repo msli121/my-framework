@@ -1,7 +1,8 @@
 package com.xiaosong.myframework.business.controller;
 
-import com.xiaosong.myframework.business.entity.ApiResult;
+import com.xiaosong.myframework.business.dto.ApiResult;
 import com.xiaosong.myframework.business.entity.UserEntity;
+import com.xiaosong.myframework.business.response.UserProfileEntity;
 import com.xiaosong.myframework.business.service.UserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -12,9 +13,6 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
-
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
 
 /**
  * @Description
@@ -37,7 +35,11 @@ public class LoginController {
         token.setRememberMe(true);
         try {
             subject.login(token);
-            return ApiResult.T("200", "登录成功");
+            UserEntity user = userService.getByUsername(username);
+            if(!(user.getEnabled() == (byte) 1)) {
+                return ApiResult.F("400", "该用户已被禁用");
+            }
+            return ApiResult.T("200", "登录成功", new UserProfileEntity(user));
         } catch (AuthenticationException e) {
             String message = "账号或密码错误";
             return ApiResult.F("400", message);
@@ -64,8 +66,12 @@ public class LoginController {
         // 存储用户信息，包括 salt 与 hash 后的密码
         user.setSalt(salt);
         user.setPassword(encodedPassword);
+        // 随机生成用户头像
+        user.setSysHeadIcon(userService.generateHeadIconRandom());
+        user.setEnabled((byte) 1);
+        user.setLocked((byte) 0);
         userService.add(user);
-        return ApiResult.T("200", "注册成功");
+        return ApiResult.T("200", "注册成功", user);
     }
 
     @GetMapping(value = "/authentication")

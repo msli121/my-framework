@@ -1,4 +1,4 @@
-package com.xiaosong.myframework.business.entity;
+package com.xiaosong.myframework.business.dto;
 
 import lombok.Data;
 
@@ -6,6 +6,9 @@ import java.io.Serializable;
 
 @Data
 public class ApiResult implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private String flag;
     private String code;
     private String msg;
@@ -41,6 +44,9 @@ public class ApiResult implements Serializable {
     }
     public static ApiResult F(){
         return newInstance("F", "", "", null);
+    }
+    public static ApiResult F(String errorInfo){
+        return newInstance("F", "", errorInfo, null);
     }
     public static ApiResult F(String errorCode, String errorInfo){
         return newInstance("F", errorCode, errorInfo, null);

@@ -1,18 +1,24 @@
 package com.xiaosong.myframework.business.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
 @Table(name = "t_user", schema = "xiaosong", catalog = "")
-public class UserEntity {
+public class UserEntity implements Serializable {
+    @Transient
+    private static final long serialVersionUID = 1L;
+
     private int id;
     private String username;
     private String password;
     private String phone;
+    private String email;
     private String salt;
-    private Byte enabled;
-    private Byte locked;
+    private String sysHeadIcon;
+    private Byte enabled = 1;
+    private Byte locked = 0;
 
     @Id
     @Column(name = "id")
@@ -56,6 +62,16 @@ public class UserEntity {
     }
 
     @Basic
+    @Column(name = "email")
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Basic
     @Column(name = "salt")
     public String getSalt() {
         return salt;
@@ -63,6 +79,16 @@ public class UserEntity {
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    @Basic
+    @Column(name = "sys_header_icon")
+    public String getSysHeadIcon() {
+        return sysHeadIcon;
+    }
+
+    public void setSysHeadIcon(String sysHeaderIcon) {
+        this.sysHeadIcon = sysHeaderIcon;
     }
 
     @Basic

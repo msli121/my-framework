@@ -1,9 +1,15 @@
 package com.xiaosong.myframework.business.service;
 
+import com.xiaosong.myframework.business.dto.UserDtoEntity;
+import com.xiaosong.myframework.business.entity.RoleEntity;
 import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.repository.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * @Description
@@ -13,6 +19,26 @@ import org.springframework.stereotype.Service;
 
 @Service("userService")
 public class UserService extends BaseService {
+
+    public List<UserDtoEntity> listAllUserDto() {
+        List<UserEntity> users = userDao.findAll();
+
+        List<UserDtoEntity> userDtoEntityList = users.stream()
+                .map(user -> (UserDtoEntity) new UserDtoEntity().convertFrom(user))
+                .collect(Collectors.toList());
+
+        userDtoEntityList.forEach(userDtoEntity -> {
+            List<String> roleCodeList = userRoleDao.getAllRoleCodeByUserId(userDtoEntity.getId());
+            List<RoleEntity> roles = roleDao.findByRoleCodeIn(roleCodeList);
+            userDtoEntity.setRoles(roles);
+        });
+
+        return userDtoEntityList;
+    }
+
+    public void resetPassword(UserEntity user) {
+
+    }
 
     public boolean isExist(String username) {
         UserEntity user = this.getByUsername(username);
@@ -29,5 +55,13 @@ public class UserService extends BaseService {
 
     public void add(UserEntity user) {
         userDao.save(user);
+    }
+
+    public String generateHeadIconRandom() {
+        int min = 1;
+        int max = 9;
+        Random random = new Random();
+        int randomNumber = random.nextInt(max-min) + min;
+        return "head-profile-" + randomNumber + ".jpg";
     }
 }

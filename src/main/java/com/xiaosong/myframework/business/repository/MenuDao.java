@@ -1,6 +1,5 @@
 package com.xiaosong.myframework.business.repository;
 
-import com.xiaosong.myframework.business.entity.Book;
 import com.xiaosong.myframework.business.entity.MenuEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
