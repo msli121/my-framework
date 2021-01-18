@@ -4,18 +4,17 @@ import com.xiaosong.myframework.business.entity.MenuEntity;
 import com.xiaosong.myframework.business.entity.RoleMenuEntity;
 import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.entity.UserRoleEntity;
-import com.xiaosong.myframework.business.repository.MenuDao;
+import com.xiaosong.myframework.business.service.base.BaseService;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
-import java.lang.Integer;
 import java.util.List;
 
 @Service("menuService")
-public class MenuService extends BaseService{
+public class MenuService extends BaseService {
     @Autowired
     public UserService userService;
 

@@ -3,8 +3,7 @@ package com.xiaosong.myframework.business.service;
 import com.xiaosong.myframework.business.dto.UserDtoEntity;
 import com.xiaosong.myframework.business.entity.RoleEntity;
 import com.xiaosong.myframework.business.entity.UserEntity;
-import com.xiaosong.myframework.business.repository.UserDao;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.xiaosong.myframework.business.service.base.BaseService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
