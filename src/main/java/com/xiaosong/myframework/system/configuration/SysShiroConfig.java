@@ -75,17 +75,20 @@ public class SysShiroConfig {
         return sysRealm;
     }
 
+
+
     public CookieRememberMeManager rememberMeManager() {
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
         cookieRememberMeManager.setCookie(rememberMeCookie());
-        cookieRememberMeManager.setCipherKey("EVANNIGHTLY_WAOU".getBytes());
+        cookieRememberMeManager.setCipherKey("tRiXIE520ChEnErh".getBytes());
         return cookieRememberMeManager;
     }
 
     @Bean
     public SimpleCookie rememberMeCookie() {
         SimpleCookie simpleCookie = new SimpleCookie("rememberMe");
-        simpleCookie.setMaxAge(259200);
+        simpleCookie.setHttpOnly(true);
+        simpleCookie.setMaxAge(10*24*60*60);
         return simpleCookie;
     }
 
