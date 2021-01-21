@@ -15,7 +15,9 @@ create table `t_user` (
     `username` varchar(255) not null,
     `password` varchar(255) not null,
     `phone` varchar(50) default '',
+    `email` varchar(255)  default '',
     `salt` varchar(255) default '',
+    `sys_header_icon` varchar(255)  default '',
     `enabled` tinyint(1) default 1,
     `locked` tinyint(1) default 0
 ) ENGINE=InnoDB auto_increment=1 default charset=utf8;
@@ -52,19 +54,22 @@ create table `t_role_menu` (
 # 系统默认角色
 insert into t_role(role_name, role_code, description) values ('role_admin', 'ROLE_ADMIN', '管理员角色');
 insert into t_role(role_name, role_code, description) values ('role_dba', 'ROLE_DBA', '数据库操作员角色');
-insert into t_role(role_name, role_code, description) values ('role_user', 'ROLE_NORMAL', '普通用户角色');
+insert into t_role(role_name, role_code, description) values ('role_default', 'ROLE_DEFAULT', '普通用户角色');
 insert into t_role(role_name, role_code, description) values ('role_guest', 'ROLE_GUEST', '游客用户角色');
 
 # 系统菜单路由
 insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_USER', '/admin', 'admin', '用户管理', 'el-icon-user', 'adminIndex', null);
-insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_USER_BASIC',  '/admin/user/basic', 'adminUserBasic', '用户信息', null, 'adminUserBasic', 'MENU_ADMIN_USER');
-insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_USER_ROLE', '/admin/user/role', 'adminUserRole', '角色配置', null, 'adminUserRole', 'MENU_ADMIN_USER');
+insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_USER_BASIC',  '/admin/user/basic', 'adminUserBasic', '用户信息', 'el-icon-s-custom', 'user/adminUserBasic', 'MENU_ADMIN_USER');
+insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_USER_ROLE', '/admin/user/role', 'adminUserRole', '角色配置', 'el-icon-s-check', 'user/adminUserRole', 'MENU_ADMIN_USER');
+
+insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_STATISTIC', '/admin', 'statistic', '数据统计', 'el-icon-s-data', 'adminIndex', null);
+insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_STATISTIC_OCR', '/admin/statistic/ocr', 'statistic_ocr', 'ocr', 'el-icon-coin', 'statistic/adminStatisticOcr', 'MENU_ADMIN_STATISTIC');
+insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_STATISTIC_PDF', '/admin/statistic/pdf', 'statistic_pdf', 'pdf', 'el-icon-coin', 'statistic/adminStatisticPdf', 'MENU_ADMIN_STATISTIC');
 
 insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_CONFIG', '/admin', 'config', '系统配置', 'el-icon-s-tools', 'adminIndex', null);
+insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_CONFIG_SETTING', '/admin/config/setting', 'config_setting', '全局设置', 'el-icon-setting', 'config/adminConfigSetting', 'MENU_ADMIN_CONFIG');
 
-insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_STATISTIC', '/admin', 'statistic', '数据统计', 'el-icon-s-tools', 'adminIndex', null);
-insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_STATISTIC_OCR', '/admin/statistic/ocr', 'statistic_ocr', 'ocr', null, 'adminStatisticOcr', 'MENU_ADMIN_STATISTIC');
-insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_STATISTIC_PDF', '/admin/statistic/pdf', 'statistic_pdf', 'pdf', null, 'adminStatisticPdf', 'MENU_ADMIN_STATISTIC');
+
 
 
 # 添加角色和菜单映射表 测试使用
@@ -77,20 +82,15 @@ insert into t_role_menu(role_code, menu_code) values ('ROLE_ADMIN', 'MENU_ADMIN_
 insert into t_role_menu(role_code, menu_code) values ('ROLE_ADMIN', 'MENU_ADMIN_STATISTIC_PDF');
 insert into t_role_menu(role_code, menu_code) values ('ROLE_ADMIN', 'MENU_ADMIN_STATISTIC_OCR');
 
-# normal 角色
-insert into t_role_menu(role_code, menu_code) values ('ROLE_NORMAL', 'MENU_ADMIN_USER');
-insert into t_role_menu(role_code, menu_code) values ('ROLE_NORMAL', 'MENU_ADMIN_USER_BASIC');
-insert into t_role_menu(role_code, menu_code) values ('ROLE_NORMAL', 'MENU_ADMIN_USER_ROLE');
-insert into t_role_menu(role_code, menu_code) values ('ROLE_NORMAL', 'MENU_ADMIN_CONFIG');
+# default 角色
+insert into t_role_menu(role_code, menu_code) values ('ROLE_DEFAULT', 'MENU_ADMIN_USER');
+insert into t_role_menu(role_code, menu_code) values ('ROLE_DEFAULT', 'MENU_ADMIN_USER_BASIC');
+insert into t_role_menu(role_code, menu_code) values ('ROLE_DEFAULT', 'MENU_ADMIN_USER_ROLE');
+insert into t_role_menu(role_code, menu_code) values ('ROLE_DEFAULT', 'MENU_ADMIN_CONFIG');
 
 # 添加admin/xiaosong用户 测试使用
 insert into t_user_role(user_id, role_code, description) values (1, 'ROLE_ADMIN', '拥有ROLE_ADMIN角色，测试使用');
-insert into t_user_role(user_id, role_code, description) values (2, 'ROLE_NORMAL', '拥有ROLE_NORMAL，测试使用');
-
-# 添加头像信息
-ALTER TABLE t_user ADD sys_header_icon varchar(255) CHARACTER SET utf8  DEFAULT 'head-profile-1.jpg' AFTER salt;
-# 添加邮箱信息
-ALTER TABLE t_user ADD email varchar(255) CHARACTER SET utf8  DEFAULT '' AFTER phone;
+insert into t_user_role(user_id, role_code, description) values (2, 'ROLE_DEFAULT', '拥有ROLE_DEFAULT，测试使用');
 
 # 数据权限
 # 新增权限表
@@ -103,11 +103,11 @@ create table `t_permission` (
     `description` varchar(255) default ''
 )ENGINE=InnoDB auto_increment=1 default charset=utf8;
 # 添加测试数据
-insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_ALL_USERS', '/api/admin/users', '');
-insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_CURRENT_ROLES', '/api/admin/roles', '');
-insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_ALL_ROLES', '/api/admin/roles/all', '');
-insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_CURRENT_MENUS', '/api/admin/menus', '');
-insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_ALL_MENUS', '/api/admin/menus/all', '');
+insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_ALL_USERS', '/api/admin/users', '获取系统所有角色的接口权限');
+insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_CURRENT_ROLES', '/api/admin/roles', '获取当前登录用户所有角色的接口权限');
+insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_ALL_ROLES', '/api/admin/roles/all', '获取系统所有角色的接口权限');
+insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_CURRENT_MENUS', '/api/admin/menus', '获取当前登录用户所有菜单的接口权限');
+insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_ALL_MENUS', '/api/admin/menus/all', '获取系统所有菜单的接口权限');
 
 
 # 新增角色与权限关联表
@@ -117,18 +117,18 @@ create table `t_role_permission` (
     `role_code` varchar(255) default '',
     `permission_code` varchar(255) default '',
     `description` varchar(255) default ''
-)
+);
 
 # 添加测试数据
 insert into t_role_permission(role_code, permission_code, description)
-    values ('ROLE_ADMIN', 'PERMISSION_ADMIN_ALL_USERS', ''),
-           ('ROLE_ADMIN', 'PERMISSION_ADMIN_CURRENT_ROLES', ''),
-           ('ROLE_ADMIN', 'PERMISSION_ADMIN_ALL_ROLES', ''),
-           ('ROLE_ADMIN', 'PERMISSION_ADMIN_CURRENT_MENUS', ''),
-           ('ROLE_ADMIN', 'PERMISSION_ADMIN_ALL_MENUS', '');
+    values ('ROLE_ADMIN', 'PERMISSION_ADMIN_ALL_USERS', 'admin/获取系统所有角色的接口权限'),
+           ('ROLE_ADMIN', 'PERMISSION_ADMIN_ALL_ROLES', 'admin/获取系统所有角色的接口权限'),
+           ('ROLE_ADMIN', 'PERMISSION_ADMIN_ALL_MENUS', 'admin/获取系统所有菜单的接口权限'),
+           ('ROLE_ADMIN', 'PERMISSION_ADMIN_CURRENT_ROLES', 'admin/获取当前登录用户所有角色的接口权限'),
+           ('ROLE_ADMIN', 'PERMISSION_ADMIN_CURRENT_MENUS', 'admin/获取当前登录用户所有菜单的接口权限');
 insert into t_role_permission(role_code, permission_code, description)
-    values ('ROLE_NORMAL', 'PERMISSION_ADMIN_CURRENT_ROLES', ''),
-           ('ROLE_NORMAL', 'PERMISSION_ADMIN_CURRENT_MENUS', '');
+    values ('ROLE_DEFAULT', 'PERMISSION_ADMIN_CURRENT_ROLES', 'default/获取当前登录用户所有角色的接口权限'),
+           ('ROLE_DEFAULT', 'PERMISSION_ADMIN_CURRENT_MENUS', 'default/获取当前登录用户所有菜单的接口权限');
 
 
 

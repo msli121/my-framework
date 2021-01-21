@@ -25,13 +25,13 @@ public class AdminController {
      * 获取所有用户
      * @return
      */
-    @GetMapping("/users")
-    public ApiResult getAllUser() {
-        return ApiResult.T(userService.listAllUserDto());
-    }
+//    @GetMapping("/users")
+//    public ApiResult getAllUser() {
+//        return ApiResult.T(userService.listAllUserDto());
+//    }
 
     /**
-     * 获取所有所有菜单
+     * 获取系统所有菜单
      * @return
      */
     @GetMapping("/menus/all")
@@ -40,16 +40,17 @@ public class AdminController {
     }
 
     /**
-     * 获取当前登录用户的所有菜单
+     * 获取当前登录用户所有菜单
      * @return
      */
     @GetMapping("/menus")
+//    @CrossOrigin(value = "http://localhost:8080", maxAge = 1800, allowCredentials = "*", allowedHeaders = "*")
     public ApiResult getMenusFromCurrentUser() {
         return ApiResult.T(menuService.getMenusFromCurrentUser());
     }
 
     /**
-     * 获取系统所有的角色
+     * 获取系统所有角色
      * @return
      */
     @GetMapping("/roles/all")
@@ -58,7 +59,7 @@ public class AdminController {
     }
 
     /**
-     * 获取当前用户具有的角色
+     * 获取当前登录用户所有角色
      * @return
      */
     @GetMapping("/roles")

@@ -31,8 +31,10 @@ public class LoginController {
     @PostMapping(value = "/login")
     public ApiResult login(@RequestBody UserEntity requestUser) {
         String username = requestUser.getUsername();
+        username = HtmlUtils.htmlEscape(username);
+
         Subject subject = SecurityUtils.getSubject();
-        subject.getSession().setTimeout(10000);
+//        subject.getSession().setTimeout(10000);
         UsernamePasswordToken token = new UsernamePasswordToken(username, requestUser.getPassword());
         token.setRememberMe(true);
         try {
@@ -41,7 +43,7 @@ public class LoginController {
             if(user.getLocked() == 1) {
                 return ApiResult.F("400", "该用户已被禁用");
             }
-            log.info("用户 [ " + username + " ]" + "登录成功");
+            log.info("用户 [ " + username + " ] " + "登录成功");
             return ApiResult.T("200", "登录成功", new UserProfileEntity(user));
         } catch (AuthenticationException e) {
             String message = "账号或密码错误";
