@@ -12,7 +12,6 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.yaml.snakeyaml.scanner.ScannerImpl;
 
 import javax.servlet.Filter;
 import java.util.HashMap;
@@ -65,6 +64,8 @@ public class SysShiroConfig {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         securityManager.setRealm(getSysRealm());
         securityManager.setRememberMeManager(rememberMeManager());
+        // 自定义会话管理
+//        securityManager.setSessionManager(getSysShiroSessionManager());
         return securityManager;
     }
 
@@ -73,6 +74,11 @@ public class SysShiroConfig {
         SysRealm sysRealm = new SysRealm();
         sysRealm.setCredentialsMatcher(hashedCredentialsMatcher());
         return sysRealm;
+    }
+
+    public SysShiroSessionManager getSysShiroSessionManager() {
+        SysShiroSessionManager sessionManager = new SysShiroSessionManager();
+        return sessionManager;
     }
 
 

@@ -40,8 +40,11 @@ public class URLPathMatchingFilter extends PathMatchingFilter {
 
         Subject subject = SecurityUtils.getSubject();
 
+        boolean isAuthenticated = subject.isAuthenticated();
+        boolean isRemembered = subject.isRemembered();
+
         if (!subject.isAuthenticated()) {
-            log.info("未登录用户尝试访问需要登录的接口");
+            log.info( subject.getPrincipals().toString() +  "用户尝试访问需要登录的接口");
             return false;
         }
 

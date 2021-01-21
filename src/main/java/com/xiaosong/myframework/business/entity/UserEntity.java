@@ -17,8 +17,8 @@ public class UserEntity implements Serializable {
     private String email;
     private String salt;
     private String sysHeadIcon;
-    private Byte enabled = 1;
-    private Byte locked = 0;
+    private int enabled = 1;
+    private int locked = 0;
 
     @Id
     @Column(name = "id")
@@ -93,21 +93,21 @@ public class UserEntity implements Serializable {
 
     @Basic
     @Column(name = "enabled")
-    public Byte getEnabled() {
+    public int getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(Byte enabled) {
+    public void setEnabled(int enabled) {
         this.enabled = enabled;
     }
 
     @Basic
     @Column(name = "locked")
-    public Byte getLocked() {
+    public int getLocked() {
         return locked;
     }
 
-    public void setLocked(Byte locked) {
+    public void setLocked(int locked) {
         this.locked = locked;
     }
 

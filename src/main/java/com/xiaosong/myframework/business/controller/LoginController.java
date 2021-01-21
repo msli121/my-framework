@@ -4,6 +4,7 @@ import com.xiaosong.myframework.business.dto.ApiResult;
 import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.response.UserProfileEntity;
 import com.xiaosong.myframework.business.service.UserService;
+import lombok.extern.log4j.Log4j2;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -21,6 +22,7 @@ import org.springframework.web.util.HtmlUtils;
  */
 @RestController
 @RequestMapping("/api")
+@Log4j2
 public class LoginController {
 
     @Autowired
@@ -36,9 +38,10 @@ public class LoginController {
         try {
             subject.login(token);
             UserEntity user = userService.getByUsername(username);
-            if(!(user.getEnabled() == (byte) 1)) {
+            if(user.getLocked() == 1) {
                 return ApiResult.F("400", "该用户已被禁用");
             }
+            log.info("用户 [ " + username + " ]" + "登录成功");
             return ApiResult.T("200", "登录成功", new UserProfileEntity(user));
         } catch (AuthenticationException e) {
             String message = "账号或密码错误";
@@ -83,7 +86,6 @@ public class LoginController {
     public ApiResult logout() {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
-        String message = "成功登出";
-        return ApiResult.T("200", message);
+        return ApiResult.T("200", "退出登录");
     }
 }
