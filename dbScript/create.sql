@@ -18,8 +18,8 @@ create table `t_user` (
     `email` varchar(255)  default '',
     `salt` varchar(255) default '',
     `sys_header_icon` varchar(255)  default '',
-    `enabled` tinyint(1) default 1,
-    `locked` tinyint(1) default 0
+    `enabled` varchar(10) default '1',
+    `locked` varchar(10) default '0'
 ) ENGINE=InnoDB auto_increment=1 default charset=utf8;
 
 drop table if exists `t_user_role`;

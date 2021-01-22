@@ -40,7 +40,7 @@ public class LoginController {
         try {
             subject.login(token);
             UserEntity user = userService.getByUsername(username);
-            if(user.getLocked() == 1) {
+            if("1".equals(user.getLocked())) {
                 return ApiResult.F("400", "该用户已被禁用");
             }
             log.info("用户 [ " + username + " ] " + "登录成功");
@@ -73,8 +73,8 @@ public class LoginController {
         user.setPassword(encodedPassword);
         // 随机生成用户头像
         user.setSysHeadIcon(userService.generateHeadIconRandom());
-        user.setEnabled((byte) 1);
-        user.setLocked((byte) 0);
+        user.setEnabled("1");
+        user.setLocked("0");
         userService.add(user);
         return ApiResult.T("200", "注册成功", user);
     }

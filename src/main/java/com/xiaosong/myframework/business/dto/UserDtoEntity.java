@@ -21,7 +21,9 @@ public class UserDtoEntity implements OutputConverter<UserDtoEntity, UserEntity>
 
     private String email;
 
-    private boolean enabled;
+    private String enabled;
+
+    private String locked;
 
     private List<RoleEntity> roles;
 }
