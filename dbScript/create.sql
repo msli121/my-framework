@@ -103,11 +103,13 @@ create table `t_permission` (
     `description` varchar(255) default ''
 )ENGINE=InnoDB auto_increment=1 default charset=utf8;
 # 添加测试数据
-insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_ALL_USERS', '/api/admin/users', '获取系统所有角色的接口权限');
-insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_CURRENT_ROLES', '/api/admin/roles', '获取当前登录用户所有角色的接口权限');
-insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_ALL_ROLES', '/api/admin/roles/all', '获取系统所有角色的接口权限');
-insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_CURRENT_MENUS', '/api/admin/menus', '获取当前登录用户所有菜单的接口权限');
-insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_ALL_MENUS', '/api/admin/menus/all', '获取系统所有菜单的接口权限');
+insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_ALL_USERS', '/api/admin/user/all', '获取系统所有角色的接口权限');
+
+insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_CURRENT_ROLES', '/api/admin/role/current', '获取当前登录用户所有角色的接口权限');
+insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_ALL_ROLES', '/api/admin/role/all', '获取系统所有角色的接口权限');
+
+insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_CURRENT_MENUS', '/api/admin/menu/current', '获取当前登录用户所有菜单的接口权限');
+insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_ALL_MENUS', '/api/admin/menu/all', '获取系统所有菜单的接口权限');
 
 
 # 新增角色与权限关联表
