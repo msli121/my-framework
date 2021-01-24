@@ -13,7 +13,9 @@ public class RoleEntity implements Serializable {
     private int id;
     private String roleCode;
     private String roleName;
+    private String enabled = "1";
     private String description;
+
 
     @Id
     @Column(name = "id")
@@ -44,6 +46,16 @@ public class RoleEntity implements Serializable {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    @Basic
+    @Column(name = "enabled")
+    public String getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(String enabled) {
+        this.enabled = enabled;
     }
 
     @Basic

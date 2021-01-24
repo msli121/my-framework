@@ -5,6 +5,7 @@ import com.xiaosong.myframework.business.entity.RoleMenuEntity;
 import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.entity.UserRoleEntity;
 import com.xiaosong.myframework.business.service.base.BaseService;
+import com.xiaosong.myframework.business.service.impl.UserServiceImpl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.List;
 @Service("menuService")
 public class MenuService extends BaseService {
     @Autowired
-    public UserService userService;
+    public UserServiceImpl userService;
 
     public List<MenuEntity> getAllByParentMenuCode(String parentMenuCode) {
         return menuDao.findAllByParentMenuCode(parentMenuCode);
@@ -26,6 +27,12 @@ public class MenuService extends BaseService {
         return menuDao.findAll();
     }
 
+    public List<MenuEntity> getAllMenusWithTree() {
+        List<MenuEntity> menus = menuDao.findAll();
+        adjustMenuStruct(menus);
+        return menus;
+    }
+
     public List<MenuEntity> getMenusFromCurrentUser() {
         String username = SecurityUtils.getSubject().getPrincipal().toString();
         UserEntity user = userDao.findByUsername(username);
@@ -33,18 +40,21 @@ public class MenuService extends BaseService {
         List<String>  roleCodeList =  userRoleDao.findAllByUserId(user.getId())
                 .stream().map(UserRoleEntity::getRoleCode).collect(Collectors.toList());
         // find all menuCode from current user
-        List<String> menuCodeList = roleMenuDao.getAllMenuCodeByRoleCode(roleCodeList);
+        List<String> menuCodeList = roleMenuDao.getAllMenuCodeByRoleCodes(roleCodeList);
         List<MenuEntity> menus = menuDao.findByMenuCodeIn(menuCodeList).stream()
                 .distinct().collect(Collectors.toList());
-
-        adjustMenuStruct(menus);
-
         return menus;
     }
 
+    public List<MenuEntity> getMenusFromCurrentUserWithTree() {
+        List<MenuEntity> menus = getMenusFromCurrentUser();
+        adjustMenuStruct(menus);
+        return menus;
+    }
+
+
     public List<MenuEntity> getMenuByRoleCode(String roleCode) {
-        List<String> menuCodeList = roleMenuDao.findAllByRoleCode(roleCode)
-                .stream().map(RoleMenuEntity::getMenuCode).collect(Collectors.toList());
+        List<String> menuCodeList = roleMenuDao.getAllMenuCodeByRoleCode(roleCode);
         List<MenuEntity> menus = menuDao.findByMenuCodeIn(menuCodeList);
 
         adjustMenuStruct(menus);

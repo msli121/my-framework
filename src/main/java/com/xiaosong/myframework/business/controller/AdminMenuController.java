@@ -14,12 +14,21 @@ public class AdminMenuController {
     MenuService menuService;
 
     /**
-     * 获取系统所有菜单
+     * 获取系统所有菜单，不展示菜单之间的层次结构
      * @return
      */
     @GetMapping("/all")
-    public ApiResult getAllMenus() {
+    public ApiResult getAllMenu() {
         return ApiResult.T(menuService.getAllMenus());
+    }
+
+    /**
+     * 获取系统所有菜单，展示菜单之间的层次结构
+     * @return
+     */
+    @GetMapping("/all/tree")
+    public ApiResult getAllMenuWithTree() {
+        return ApiResult.T(menuService.getAllMenusWithTree());
     }
 
     /**
@@ -31,5 +40,13 @@ public class AdminMenuController {
         return ApiResult.T(menuService.getMenusFromCurrentUser());
     }
 
+    /**
+     * 获取当前登录用户所有菜单
+     * @return
+     */
+    @GetMapping("/current/tree")
+    public ApiResult getMenusFromCurrentUserWithTree() {
+        return ApiResult.T(menuService.getMenusFromCurrentUserWithTree());
+    }
 
 }

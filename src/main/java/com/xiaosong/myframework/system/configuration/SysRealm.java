@@ -2,7 +2,7 @@ package com.xiaosong.myframework.system.configuration;
 
 import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.service.PermissionService;
-import com.xiaosong.myframework.business.service.UserService;
+import com.xiaosong.myframework.business.service.impl.UserServiceImpl;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -10,12 +10,7 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * @Description Shiro配置类
@@ -26,7 +21,7 @@ import java.util.Set;
 public class SysRealm extends AuthorizingRealm {
 
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Autowired
     private PermissionService permissionService;

@@ -1,66 +1,29 @@
 package com.xiaosong.myframework.business.service;
 
 import com.xiaosong.myframework.business.dto.UserDtoEntity;
-import com.xiaosong.myframework.business.entity.RoleEntity;
 import com.xiaosong.myframework.business.entity.UserEntity;
-import com.xiaosong.myframework.business.service.base.BaseService;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 
-/**
- * @Description
- * @Author msli
- * @Date 2021/01/13
- */
+public interface UserService {
 
-@Service("userService")
-public class UserService extends BaseService {
+    void editUser(UserDtoEntity user);
 
-    public List<UserDtoEntity> listAllUserDto() {
-        List<UserEntity> users = userDao.findAll();
+    List<UserDtoEntity> listAllUserDto();
 
-        List<UserDtoEntity> userDtoEntityList = users.stream()
-                .map(user -> (UserDtoEntity) new UserDtoEntity().convertFrom(user))
-                .collect(Collectors.toList());
+    boolean isExist(String username);
 
-        userDtoEntityList.forEach(userDtoEntity -> {
-            List<String> roleCodeList = userRoleDao.getAllRoleCodeByUserId(userDtoEntity.getId());
-            List<RoleEntity> roles = roleDao.findByRoleCodeIn(roleCodeList);
-            userDtoEntity.setRoles(roles);
-        });
+    UserEntity getByUsername(String username);
 
-        return userDtoEntityList;
-    }
+    void add(UserEntity user);
 
-    public void resetPassword(UserEntity user) {
+    String generateHeadIconRandom();
 
-    }
+    void updateUserStatus(UserEntity user);
 
-    public boolean isExist(String username) {
-        UserEntity user = this.getByUsername(username);
-        return null!=user;
-    }
+    UserEntity resetPassword(UserEntity user);
 
-    public UserEntity getByUsername(String username) {
-        return userDao.findByUsername(username);
-    }
-
-    public UserEntity getByUsernameAndPassword(String username, String password){
-        return userDao.getByUsernameAndPassword(username, password);
-    }
-
-    public void add(UserEntity user) {
-        userDao.save(user);
-    }
-
-    public String generateHeadIconRandom() {
-        int min = 1;
-        int max = 9;
-        Random random = new Random();
-        int randomNumber = random.nextInt(max-min) + min;
-        return "head-profile-" + randomNumber + ".jpg";
-    }
 }

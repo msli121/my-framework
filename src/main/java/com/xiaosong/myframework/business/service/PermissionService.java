@@ -1,8 +1,10 @@
 package com.xiaosong.myframework.business.service;
 
 import com.xiaosong.myframework.business.entity.PermissionEntity;
+import com.xiaosong.myframework.business.entity.RoleEntity;
 import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.service.base.BaseService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,6 +12,31 @@ import java.util.List;
 
 @Service("permissionService")
 public class PermissionService extends BaseService {
+
+    public void save(PermissionEntity p) {
+        permissionDao.save(p);
+    }
+
+    public void updatePermissionStatus(PermissionEntity permission) {
+        PermissionEntity roleInDB = permissionDao.findByPermissionCode(permission.getPermissionCode());
+        roleInDB.setEnabled(permission.getEnabled());
+        permissionDao.save(roleInDB);
+    }
+
+    public List<PermissionEntity> getAllPermission() {
+       return permissionDao.findAll();
+    }
+
+    public List<PermissionEntity> getAllPermissionWithTree() {
+        List<PermissionEntity> permissions = permissionDao.findAll();
+        adjustPermissionStruct(permissions);
+        return permissions;
+    }
+
+    public List<PermissionEntity> getAllPermissionByRoleCode(String roleCode) {
+        List<String> permissionCodes = rolePermissionDao.getAllPermissionCodeByRoleCode(roleCode);
+        return permissionDao.getAllPermissionByPermissionCodes(permissionCodes);
+    }
 
     public List<String> listPermissionUrlByUserName(String username) {
         List<String> permissions= new ArrayList<>();
@@ -22,7 +49,7 @@ public class PermissionService extends BaseService {
 
     public List<String> listPermissionUrlByUserId(int userId) {
         List<String> roleCodeList = userRoleDao.getAllRoleCodeByUserId(userId);
-        List<String> permissionCodeList = rolePermissionDao.getAllPermissionCodeByRoleCode(roleCodeList);
+        List<String> permissionCodeList = rolePermissionDao.getAllPermissionCodeByRoleCodes(roleCodeList);
         return permissionDao.getAllPermissionUrlByPermissionCode(permissionCodeList);
     }
 
@@ -43,4 +70,11 @@ public class PermissionService extends BaseService {
         return false;
     }
 
+    private void adjustPermissionStruct(List<PermissionEntity> permissions) {
+        permissions.forEach(item -> {
+            List<PermissionEntity> children = permissionDao.findAllByParentPermissionCode(item.getParentPermissionCode());
+            item.setChildren(children);
+        });
+        permissions.removeIf(item -> StringUtils.isNotEmpty(item.getParentPermissionCode()));
+    }
 }

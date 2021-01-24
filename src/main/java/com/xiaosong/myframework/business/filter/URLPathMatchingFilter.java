@@ -36,7 +36,7 @@ public class URLPathMatchingFilter extends PathMatchingFilter {
         }
 
         String requestAPI = getPathWithinApplication(request);
-        log.info("访问接口：" + requestAPI);
+//        log.info("访问接口：" + requestAPI);
 
         Subject subject = SecurityUtils.getSubject();
 
@@ -44,12 +44,13 @@ public class URLPathMatchingFilter extends PathMatchingFilter {
         boolean isRemembered = subject.isRemembered();
 
         if (!subject.isAuthenticated()) {
-            log.info( subject.getPrincipals().toString() +  "用户尝试访问需要登录的接口");
+            log.info( "用户 [ " + subject.getPrincipals().toString() +  " ] 访问未授权接口：" + requestAPI);
             return false;
         }
 
         // 判断访问接口是否需要过滤（数据库中是否有对应信息）
         boolean needFilter = permissionService.needFilter(requestAPI);
+        log.info("接口 [ " + requestAPI + " ] 需要过滤: " + needFilter);
         if(!needFilter) {
             return true;
         } else {
@@ -66,10 +67,10 @@ public class URLPathMatchingFilter extends PathMatchingFilter {
             }
 
             if (hasPermission) {
-                log.trace("用户：" + username + "访问了：" + requestAPI + "接口");
+                log.info("用户 [ " + username + " ] 访问授权接口：" + requestAPI);
                 return true;
             } else {
-                log.warn( "用户：" + username + "访问了没有权限的接口：" + requestAPI);
+                log.warn( "用户 [ " + username + " ] 访问未授权接口：" + requestAPI);
                 return false;
             }
         }

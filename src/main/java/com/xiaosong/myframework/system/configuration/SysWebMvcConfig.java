@@ -13,6 +13,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.alibaba.fastjson.serializer.SerializerFeature.DisableCircularReferenceDetect;
+import static com.alibaba.fastjson.serializer.SerializerFeature.WriteNullStringAsEmpty;
+
 /**
  * @Description
  * @Author msli
@@ -45,7 +48,9 @@ public class SysWebMvcConfig implements WebMvcConfigurer {
                 SerializerFeature.WriteMapNullValue,
                 SerializerFeature.WriteNullListAsEmpty,
                 SerializerFeature.PrettyFormat,
-                SerializerFeature.WriteNullStringAsEmpty
+                WriteNullStringAsEmpty,
+                // 关闭重复引用和循环引用，可能带来stackOverFlow风险
+                DisableCircularReferenceDetect
         );
         converter.setFastJsonConfig(config);
 

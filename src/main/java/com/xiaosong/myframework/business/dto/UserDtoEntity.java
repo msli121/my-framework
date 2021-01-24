@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @ToString
 public class UserDtoEntity implements OutputConverter<UserDtoEntity, UserEntity> {
-    private int id;
+    private Integer id;
 
     private String username;
 

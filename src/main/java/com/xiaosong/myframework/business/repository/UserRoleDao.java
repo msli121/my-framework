@@ -15,4 +15,5 @@ public interface UserRoleDao extends JpaRepository<UserRoleEntity, Integer> {
 
     void deleteAllByUserId(int userId);
 
+
 }

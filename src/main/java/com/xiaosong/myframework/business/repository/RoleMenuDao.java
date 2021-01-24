@@ -12,7 +12,10 @@ public interface RoleMenuDao extends JpaRepository<RoleMenuEntity, Integer> {
     List<RoleMenuEntity> findAllByRoleCode(String roleCode);
 
     @Query("select distinct t.menuCode from RoleMenuEntity t where t.roleCode in ?1")
-    List<String> getAllMenuCodeByRoleCode(List<String> roleCodeList);
+    List<String> getAllMenuCodeByRoleCodes(List<String> roleCodeList);
+
+    @Query("select distinct t.menuCode from RoleMenuEntity t where t.roleCode = ?1")
+    List<String> getAllMenuCodeByRoleCode(String roleCode);
 
     void deleteAllByRoleCode(String roleCode);
 

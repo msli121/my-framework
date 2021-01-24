@@ -3,7 +3,7 @@ package com.xiaosong.myframework.business.controller;
 import com.xiaosong.myframework.business.dto.ApiResult;
 import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.response.UserProfileEntity;
-import com.xiaosong.myframework.business.service.UserService;
+import com.xiaosong.myframework.business.service.impl.UserServiceImpl;
 import lombok.extern.log4j.Log4j2;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -26,7 +26,7 @@ import org.springframework.web.util.HtmlUtils;
 public class LoginController {
 
     @Autowired
-    UserService userService;
+    UserServiceImpl userService;
 
     @PostMapping(value = "/login")
     public ApiResult login(@RequestBody UserEntity requestUser) {

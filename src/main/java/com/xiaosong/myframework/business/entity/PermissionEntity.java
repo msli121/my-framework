@@ -2,6 +2,7 @@ package com.xiaosong.myframework.business.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -13,11 +14,17 @@ public class PermissionEntity implements Serializable {
     private int id;
     private String groupCode;
     private String permissionCode;
+    private String nameZh;
+    private String parentPermissionCode;
     private String url;
+    private String enabled = "1";
     private String description;
+
+    List<PermissionEntity> children;
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public int getId() {
         return id;
     }
@@ -64,6 +71,45 @@ public class PermissionEntity implements Serializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Basic
+    @Column(name = "name_zh")
+    public String getNameZh() {
+        return nameZh;
+    }
+
+    public void setNameZh(String nameZh) {
+        this.nameZh = nameZh;
+    }
+
+    @Basic
+    @Column(name = "enabled")
+    public String getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(String enabled) {
+        this.enabled = enabled;
+    }
+
+    @Basic
+    @Column(name = "parent_permission_code")
+    public String getParentPermissionCode() {
+        return parentPermissionCode;
+    }
+
+    public void setParentPermissionCode(String parentPermissionCode) {
+        this.parentPermissionCode = parentPermissionCode;
+    }
+
+    @Transient
+    public List<PermissionEntity> getChildren() {
+        return children;
+    }
+
+    public void setChildren(List<PermissionEntity> children) {
+        this.children = children;
     }
 
     @Override

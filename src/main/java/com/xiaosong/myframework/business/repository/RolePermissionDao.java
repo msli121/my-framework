@@ -16,6 +16,10 @@ import java.util.List;
 public interface RolePermissionDao extends JpaRepository<RolePermissionEntity, Integer> {
 
     @Query("select distinct t.permissionCode from RolePermissionEntity t where t.roleCode in ?1")
-    List<String> getAllPermissionCodeByRoleCode(List<String> roleCodeList);
+    List<String> getAllPermissionCodeByRoleCodes(List<String> roleCodeList);
 
+    @Query("select distinct t.permissionCode from RolePermissionEntity t where t.roleCode = ?1")
+    List<String> getAllPermissionCodeByRoleCode(String roleCode);
+
+    void deleteAllByRoleCode(String roleCode);
 }

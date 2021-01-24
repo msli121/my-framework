@@ -6,6 +6,7 @@ create table `t_role` (
     `id` int(11) not null auto_increment primary key,
     `role_code` varchar(255) not null unique,
     `role_name` varchar(255) not null,
+    `enabled` varchar(10) default '1',
     `description` varchar(255) default null
 ) ENGINE=InnoDB auto_increment=1 default charset=utf8;
 
@@ -53,14 +54,17 @@ create table `t_role_menu` (
 
 # 系统默认角色
 insert into t_role(role_name, role_code, description) values ('role_admin', 'ROLE_ADMIN', '管理员角色');
-insert into t_role(role_name, role_code, description) values ('role_dba', 'ROLE_DBA', '数据库操作员角色');
-insert into t_role(role_name, role_code, description) values ('role_default', 'ROLE_DEFAULT', '普通用户角色');
-insert into t_role(role_name, role_code, description) values ('role_guest', 'ROLE_GUEST', '游客用户角色');
+insert into t_role(role_name, role_code, description) values ('role_dba', 'ROLE_DBA', '数据库管理员角色');
+insert into t_role(role_name, role_code, description) values ('role_default', 'ROLE_DEFAULT', '默认角色');
+insert into t_role(role_name, role_code, description) values ('role_guest', 'ROLE_GUEST', '游客角色');
 
 # 系统菜单路由
 insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_USER', '/admin', 'admin', '用户管理', 'el-icon-user', 'adminIndex', null);
 insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_USER_BASIC',  '/admin/user/basic', 'adminUserBasic', '用户信息', 'el-icon-s-custom', 'user/adminUserBasic', 'MENU_ADMIN_USER');
 insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_USER_ROLE', '/admin/user/role', 'adminUserRole', '角色配置', 'el-icon-s-check', 'user/adminUserRole', 'MENU_ADMIN_USER');
+insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_USER_PERMISSION', '/admin/user/permission', 'adminPermission', '权限配置', 'el-icon-lock', 'user/adminPermission', 'MENU_ADMIN_USER');
+
+
 
 insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_STATISTIC', '/admin', 'statistic', '数据统计', 'el-icon-s-data', 'adminIndex', null);
 insert into t_menu(menu_code, path, name, name_zh, icon, component, parent_menu_code) values ('MENU_ADMIN_STATISTIC_OCR', '/admin/statistic/ocr', 'statistic_ocr', 'ocr', 'el-icon-coin', 'statistic/adminStatisticOcr', 'MENU_ADMIN_STATISTIC');
@@ -98,18 +102,36 @@ drop table if exists `t_permission`;
 create table `t_permission` (
     `id` int not null auto_increment primary key,
     `group_code` varchar(255) default '',
-    `permission_code` varchar(255) default '' unique,
+    `permission_code` varchar(255) not null unique,
+    `name_zh` varchar(255) default null,
+    `parent_permission_code` varchar(255) default null,
     `url` varchar(255) default '',
+    `enabled` varchar(10) default '1',
     `description` varchar(255) default ''
 )ENGINE=InnoDB auto_increment=1 default charset=utf8;
 # 添加测试数据
-insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_ALL_USERS', '/api/admin/user/all', '获取系统所有角色的接口权限');
+insert into t_permission(group_code, permission_code, name_zh, parent_permission_code, url, description)
+       values ('admin', 'PERMISSION_ADMIN', '后台权限', '', '/api/admin', '系统后台权限'),
+              ('admin', 'PERMISSION_ADMIN_USER', '用户管理', 'PERMISSION_ADMIN', '/api/admin/user/**', '系统后台用户管理的权限'),
+              ('admin', 'PERMISSION_ADMIN_ROLE', '角色管理', 'PERMISSION_ADMIN', '/api/admin/role/**', '系统后台角色管理的权限'),
+              ('admin', 'PERMISSION_ADMIN_PERMISSION', '权限管理', 'PERMISSION_ADMIN', '/api/admin/permission/**', '系统后台权限管理的权限'),
 
-insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_CURRENT_ROLES', '/api/admin/role/current', '获取当前登录用户所有角色的接口权限');
-insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_ALL_ROLES', '/api/admin/role/all', '获取系统所有角色的接口权限');
+              ('ocr', 'PERMISSION_OCR', 'ocr接口权限', '', '/api/ocr', 'ocr接口的访问权限'),
+              ('ocr', 'PERMISSION_OCR_VIP', 'VIP权限', 'PERMISSION_OCR', '/api/ocr/vip', 'VIP用户对ocr接口的访问权限'),
+              ('ocr', 'PERMISSION_OCR_SUPER_VIP', 'SUPER_VIP权限', 'PERMISSION_OCR', '/api/ocr/super-vip', 'SuperVIP用户对ocr接口的访问权限'),
 
-insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_CURRENT_MENUS', '/api/admin/menu/current', '获取当前登录用户所有菜单的接口权限');
-insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_ALL_MENUS', '/api/admin/menu/all', '获取系统所有菜单的接口权限');
+              ('pdf', 'PERMISSION_PDF', 'pdf接口权限', '', '/api/pdf', 'pdf接口的访问权限'),
+              ('pdf', 'PERMISSION_PDF_VIP', 'pdf权限', 'PERMISSION_PDF', '/api/pdf/vip', 'VIP用户对pdf接口的访问权限'),
+              ('pdf', 'PERMISSION_PDF_SUPER_VIP', 'SUPER_VIP权限', 'PERMISSION_PDF', '/api/pdf/super-vip', 'SuperVIP用户对pdf接口的访问权限');
+
+
+# insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_ALL_USERS', '/api/admin/user/all', '获取系统所有角色的接口权限');
+#
+# insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_CURRENT_ROLES', '/api/admin/role/current', '获取当前登录用户所有角色的接口权限');
+# insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_ALL_ROLES', '/api/admin/role/all', '获取系统所有角色的接口权限');
+#
+# insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_CURRENT_MENUS', '/api/admin/menu/current', '获取当前登录用户所有菜单的接口权限');
+# insert into t_permission(group_code, permission_code, url, description) values ('admin', 'PERMISSION_ADMIN_ALL_MENUS', '/api/admin/menu/all', '获取系统所有菜单的接口权限');
 
 
 # 新增角色与权限关联表
@@ -122,16 +144,29 @@ create table `t_role_permission` (
 );
 
 # 添加测试数据
-insert into t_role_permission(role_code, permission_code, description)
-    values ('ROLE_ADMIN', 'PERMISSION_ADMIN_ALL_USERS', 'admin/获取系统所有角色的接口权限'),
-           ('ROLE_ADMIN', 'PERMISSION_ADMIN_ALL_ROLES', 'admin/获取系统所有角色的接口权限'),
-           ('ROLE_ADMIN', 'PERMISSION_ADMIN_ALL_MENUS', 'admin/获取系统所有菜单的接口权限'),
-           ('ROLE_ADMIN', 'PERMISSION_ADMIN_CURRENT_ROLES', 'admin/获取当前登录用户所有角色的接口权限'),
-           ('ROLE_ADMIN', 'PERMISSION_ADMIN_CURRENT_MENUS', 'admin/获取当前登录用户所有菜单的接口权限');
-insert into t_role_permission(role_code, permission_code, description)
-    values ('ROLE_DEFAULT', 'PERMISSION_ADMIN_CURRENT_ROLES', 'default/获取当前登录用户所有角色的接口权限'),
-           ('ROLE_DEFAULT', 'PERMISSION_ADMIN_CURRENT_MENUS', 'default/获取当前登录用户所有菜单的接口权限');
+# insert into t_role_permission(role_code, permission_code, description)
+#     values ('ROLE_ADMIN', 'PERMISSION_ADMIN_ALL_USERS', 'admin/获取系统所有角色的接口权限'),
+#            ('ROLE_ADMIN', 'PERMISSION_ADMIN_ALL_ROLES', 'admin/获取系统所有角色的接口权限'),
+#            ('ROLE_ADMIN', 'PERMISSION_ADMIN_ALL_MENUS', 'admin/获取系统所有菜单的接口权限'),
+#            ('ROLE_ADMIN', 'PERMISSION_ADMIN_CURRENT_ROLES', 'admin/获取当前登录用户所有角色的接口权限'),
+#            ('ROLE_ADMIN', 'PERMISSION_ADMIN_CURRENT_MENUS', 'admin/获取当前登录用户所有菜单的接口权限');
+# insert into t_role_permission(role_code, permission_code, description)
+#     values ('ROLE_DEFAULT', 'PERMISSION_ADMIN_CURRENT_ROLES', 'default/获取当前登录用户所有角色的接口权限'),
+#            ('ROLE_DEFAULT', 'PERMISSION_ADMIN_CURRENT_MENUS', 'default/获取当前登录用户所有菜单的接口权限');
 
+insert into t_role_permission(role_code, permission_code, description)
+values ('ROLE_ADMIN', 'PERMISSION_ADMIN', 'admin角色拥有系统后台权限'),
+       ('ROLE_ADMIN', 'PERMISSION_ADMIN_USER', 'admin角色拥有系统后台用户管理的权限'),
+       ('ROLE_ADMIN', 'PERMISSION_ADMIN_ROLE', 'admin角色拥有系统后台角色管理的权限'),
+       ('ROLE_ADMIN', 'PERMISSION_ADMIN_PERMISSION', 'admin角色拥有系统后台权限管理的权限'),
+
+       ('ROLE_ADMIN', 'PERMISSION_OCR', 'admin角色拥有ocr接口的访问权限'),
+       ('ROLE_ADMIN', 'PERMISSION_OCR_VIP', 'admin角色拥有IP用户对ocr接口的访问权限'),
+       ('ROLE_ADMIN', 'PERMISSION_OCR_SUPER_VIP', 'admin角色拥有SuperVIP用户对ocr接口的访问权限'),
+
+       ('ROLE_ADMIN', 'PERMISSION_PDF', 'admin角色拥有pdf接口的访问权限'),
+       ('ROLE_ADMIN', 'PERMISSION_PDF_VIP', 'admin角色拥有IP用户对pdf接口的访问权限'),
+       ('ROLE_ADMIN', 'PERMISSION_PDF_SUPER_VIP', 'admin角色拥有SuperVIP用户对pdf接口的访问权限');
 
 
 
