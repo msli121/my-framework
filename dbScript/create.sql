@@ -141,7 +141,7 @@ create table `t_role_permission` (
     `role_code` varchar(255) default '',
     `permission_code` varchar(255) default '',
     `description` varchar(255) default ''
-);
+)ENGINE=InnoDB auto_increment=1 default charset=utf8;
 
 # 添加测试数据
 # insert into t_role_permission(role_code, permission_code, description)
@@ -167,6 +167,18 @@ values ('ROLE_ADMIN', 'PERMISSION_ADMIN', 'admin角色拥有系统后台权限')
        ('ROLE_ADMIN', 'PERMISSION_PDF', 'admin角色拥有pdf接口的访问权限'),
        ('ROLE_ADMIN', 'PERMISSION_PDF_VIP', 'admin角色拥有IP用户对pdf接口的访问权限'),
        ('ROLE_ADMIN', 'PERMISSION_PDF_SUPER_VIP', 'admin角色拥有SuperVIP用户对pdf接口的访问权限');
+
+# 新增系统文件表，存储base64编码后的文件
+drop table if exists `t_sys_file`;
+create table `t_sys_file` (
+    `id` int(11) not null auto_increment primary key,
+    `user_id` varchar(255) default '',
+    `file_name` varchar(255) default '',
+    `file_size` int,
+    `file_type` varchar(255) default '',
+    `file_data` MEDIUMTEXT default null,
+    `upload_time` timestamp not null default NOW() comment '上传时间'
+)ENGINE=InnoDB auto_increment=1 default charset=utf8;
 
 
 

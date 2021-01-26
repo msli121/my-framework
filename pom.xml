@@ -90,6 +90,11 @@
 <!--            <artifactId>mybatis-spring-boot-starter</artifactId>-->
 <!--            <version>1.3.2</version>-->
 <!--        </dependency>-->
+        <!--Httpclient-->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+        </dependency>
         <!--MySql-->
         <dependency>
             <groupId>mysql</groupId>
