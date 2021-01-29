@@ -4,12 +4,10 @@ import com.xiaosong.myframework.business.dto.UserDtoEntity;
 import com.xiaosong.myframework.business.entity.RoleEntity;
 import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.entity.UserRoleEntity;
-import com.xiaosong.myframework.business.repository.UserDao;
 import com.xiaosong.myframework.business.service.UserService;
 import com.xiaosong.myframework.business.service.base.BaseService;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.jpa.repository.Modifying;
@@ -31,6 +29,7 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl extends BaseService implements UserService {
 
+    @Override
     public List<UserDtoEntity> listAllUserDto() {
         List<UserEntity> users = userDao.findAll();
 
@@ -88,6 +87,7 @@ public class UserServiceImpl extends BaseService implements UserService {
         return userDao.save(userInDB);
     }
 
+    @Override
     @Transactional
     @Modifying
     public void editUser(UserDtoEntity user) {

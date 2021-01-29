@@ -2,10 +2,7 @@ package com.xiaosong.myframework.business.service;
 
 import com.xiaosong.myframework.business.dto.UserDtoEntity;
 import com.xiaosong.myframework.business.entity.UserEntity;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 public interface UserService {

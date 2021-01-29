@@ -1,8 +1,10 @@
 package com.xiaosong.myframework.business.controller;
 
 import com.xiaosong.myframework.business.dto.ApiResult;
+import com.xiaosong.myframework.business.dto.WeChatLoginDtoEntity;
 import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.response.UserProfileEntity;
+import com.xiaosong.myframework.business.service.LoginService;
 import com.xiaosong.myframework.business.service.impl.UserServiceImpl;
 import lombok.extern.log4j.Log4j2;
 import org.apache.shiro.SecurityUtils;
@@ -28,6 +30,9 @@ public class LoginController {
     @Autowired
     UserServiceImpl userService;
 
+    @Autowired
+    LoginService loginService;
+
     @PostMapping(value = "/login")
     public ApiResult login(@RequestBody UserEntity requestUser) {
         String username = requestUser.getUsername();
@@ -49,6 +54,16 @@ public class LoginController {
             String message = "账号或密码错误";
             return ApiResult.F("400", message);
         }
+    }
+
+    /**
+     * 微信扫码用户登录
+     * @param loginDtoEntity
+     * @return
+     */
+    @PostMapping(value = "/login/we-chat")
+    public ApiResult loginByWeChat(@RequestBody WeChatLoginDtoEntity loginDtoEntity) {
+        return ApiResult.T("", "注册成功", loginService.loginByWeChat(loginDtoEntity));
     }
 
     @PostMapping(value = "/registry")

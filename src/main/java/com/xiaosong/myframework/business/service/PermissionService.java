@@ -1,7 +1,6 @@
 package com.xiaosong.myframework.business.service;
 
 import com.xiaosong.myframework.business.entity.PermissionEntity;
-import com.xiaosong.myframework.business.entity.RoleEntity;
 import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.service.base.BaseService;
 import org.apache.commons.lang.StringUtils;

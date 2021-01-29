@@ -47,6 +47,8 @@ spring:
 
 ocr:
   url: http://192.168.129.140:8868/predict/my_chinese_ocr
+  appId:
+  appSecret:
 
 
 
