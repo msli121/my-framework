@@ -11,15 +11,33 @@ import java.util.List;
 @Data
 @ToString
 public class UserDtoEntity implements OutputConverter<UserDtoEntity, UserEntity> {
+
     private Integer id;
 
     private String username;
+
+    private String country;
+
+    private String province;
+
+    private String city;
+
+    private String sex;
 
     private String sysHeadIcon;
 
     private String phone;
 
     private String email;
+
+    private String userType;
+
+    // 微信相关
+    private String openId;
+
+    private String unionId;
+
+    private String headImgUrl;
 
     private String enabled;
 

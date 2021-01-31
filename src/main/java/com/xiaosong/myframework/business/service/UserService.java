@@ -7,20 +7,26 @@ import java.util.List;
 
 public interface UserService {
 
+    void initNewUser(String password, UserEntity user);
+
     void editUser(UserDtoEntity user);
 
-    List<UserDtoEntity> listAllUserDto();
-
-    boolean isExist(String username);
-
-    UserEntity getByUsername(String username);
-
-    void add(UserEntity user);
-
-    String generateHeadIconRandom();
+    void save(UserEntity user);
 
     void updateUserStatus(UserEntity user);
 
+    boolean isExist(String username);
+
+    String generateSysHeadIconRandom();
+
+    UserEntity findEntityByUsername(String username);
+
     UserEntity resetPassword(UserEntity user);
+
+    UserEntity findEntityByOpenId(String openId);
+
+    UserEntity findEntityByUnionId(String unionId);
+
+    List<UserDtoEntity> listAllUserDto();
 
 }

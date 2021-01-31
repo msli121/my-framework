@@ -46,24 +46,25 @@ public class UserServiceImpl extends BaseService implements UserService {
         return userDtoEntityList;
     }
 
+    @Override
     public boolean isExist(String username) {
-        UserEntity user = this.getByUsername(username);
+        UserEntity user = this.findEntityByUsername(username);
         return null!=user;
     }
 
-    public UserEntity getByUsername(String username) {
+    @Override
+    public UserEntity findEntityByUsername(String username) {
         return userDao.findByUsername(username);
     }
 
-    public UserEntity getByUsernameAndPassword(String username, String password){
-        return userDao.getByUsernameAndPassword(username, password);
-    }
 
-    public void add(UserEntity user) {
+    @Override
+    public void save(UserEntity user) {
         userDao.save(user);
     }
 
-    public String generateHeadIconRandom() {
+    @Override
+    public String generateSysHeadIconRandom() {
         int min = 1;
         int max = 9;
         Random random = new Random();
@@ -85,6 +86,33 @@ public class UserServiceImpl extends BaseService implements UserService {
         String encodedPassword = new SimpleHash("md5", "123", salt, times).toString();
         userInDB.setPassword(encodedPassword);
         return userDao.save(userInDB);
+    }
+
+    @Override
+    public UserEntity findEntityByOpenId(String openId) {
+        return userDao.findByOpenId(openId);
+    }
+
+    @Override
+    public UserEntity findEntityByUnionId(String unionId) {
+        return userDao.findByUnionId(unionId);
+    }
+
+    @Override
+    public void initNewUser(String password, UserEntity user) {
+        // 生成盐,默认长度16位
+        String salt = new SecureRandomNumberGenerator().nextBytes().toString();
+        // 设置 hash 算法迭代次数
+        int times = 2;
+        // 得到 hash 后的密码
+        String encodedPassword = new SimpleHash("md5", password, salt, times).toString();
+        // 存储用户信息，包括 salt 与 hash 后的密码
+        user.setSalt(salt);
+        user.setPassword(encodedPassword);
+        // 随机生成用户头像
+        user.setSysHeadIcon(generateSysHeadIconRandom());
+        user.setEnabled("1");
+        user.setLocked("0");
     }
 
     @Override

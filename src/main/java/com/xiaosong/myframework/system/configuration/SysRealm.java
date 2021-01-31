@@ -44,15 +44,22 @@ public class SysRealm extends AuthorizingRealm {
     // 获取认证信息，即根据 token 中的用户名从数据库中获取密码、盐等并返回
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        String userName = token.getPrincipal().toString();
-        UserEntity user = userService.getByUsername(userName);
-        if (ObjectUtils.isEmpty(user)) {
+        UserEntity existedUser = null;
+        String principal = token.getPrincipal().toString();
+        // 先通过username查找用户
+        existedUser = userService.findEntityByUsername(principal);
+        // 不存在再通过openId查找
+        if(ObjectUtils.isEmpty(existedUser)) {
+            existedUser = userService.findEntityByOpenId(principal);
+        }
+        // 不存在抛出用户不存在异常
+        if (ObjectUtils.isEmpty(existedUser)) {
             throw new UnknownAccountException();
         }
-        String passwordInDB = user.getPassword();
-        String salt = user.getSalt();
+        String passwordInDB = existedUser.getPassword();
+        String salt = existedUser.getSalt();
 
-        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(userName, passwordInDB, ByteSource.Util.bytes(salt), getName());
+        SimpleAuthenticationInfo authenticationInfo = new SimpleAuthenticationInfo(principal, passwordInDB, ByteSource.Util.bytes(salt), getName());
         return authenticationInfo;
     }
 }
