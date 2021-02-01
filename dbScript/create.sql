@@ -1,6 +1,11 @@
-drop database if exists `xiaosong`;
-create database `xiaosong` default character set utf8;
-use xiaosong;
+# drop database if exists `xiaosong`;
+# create database `xiaosong` default character set utf8;
+# use xiaosong;
+
+drop database if exists `ocr`;
+create database `ocr` default character set utf8;
+use ocr;
+
 drop table if exists `t_role`;
 create table `t_role` (
     `id` int(11) not null auto_increment primary key,
