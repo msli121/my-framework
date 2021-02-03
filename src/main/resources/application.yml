@@ -4,9 +4,12 @@ server:
 #    context-path:
   tomcat:
     uri-encoding: UTF-8
-
+logging:
+  config: classpath:log4j2.xml
 spring:
-#  main:
+  application:
+    name: ocr-backend
+  #  main:
 #    allow-bean-definition-overriding: true
   thymeleaf:
     cache: true

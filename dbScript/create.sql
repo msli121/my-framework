@@ -2,9 +2,9 @@
 # create database `xiaosong` default character set utf8;
 # use xiaosong;
 
-drop database if exists `ocr`;
-create database `ocr` default character set utf8;
-use ocr;
+# drop database if exists `ocr`;
+# create database `ocr` default character set utf8;
+# use ocr;
 
 drop table if exists `t_role`;
 create table `t_role` (
