@@ -27,6 +27,9 @@ public class URLPathMatchingFilter extends PathMatchingFilter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 
+        String requestAPI = getPathWithinApplication(request);
+        log.info("访问接口：" + requestAPI);
+
         if (HttpMethod.OPTIONS.toString().equals(httpServletRequest.getMethod())) {
             httpServletResponse.setStatus(HttpStatus.NO_CONTENT.value());
             return true;
@@ -34,9 +37,6 @@ public class URLPathMatchingFilter extends PathMatchingFilter {
         if (null == permissionService) {
             permissionService = SpringContextUtils.getContext().getBean(PermissionService.class);
         }
-
-        String requestAPI = getPathWithinApplication(request);
-//        log.info("访问接口：" + requestAPI);
 
         Subject subject = SecurityUtils.getSubject();
 

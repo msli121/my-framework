@@ -38,7 +38,7 @@ public class SysShiroConfig {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-        // 防前端鸡贼登录规则 auth 是shiro自带的过滤器，还有 anon（可匿名访问）、roles（需要角色）、perms（需要权限）
+        // 防前端鸡贼登录规则 auth 是 shiro 自带的过滤器，还有 anon（可匿名访问）、roles（需要角色）、perms（需要权限）
         filterChainDefinitionMap.put("/api/authentication", "authc");
 
         // 自定义过滤器设置 1.
