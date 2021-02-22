@@ -6,6 +6,7 @@
 # create database `ocr` default character set utf8;
 # use ocr;
 
+# 角色表
 drop table if exists `t_role`;
 create table `t_role` (
     `id` int(11) not null auto_increment primary key,
@@ -15,6 +16,7 @@ create table `t_role` (
     `description` varchar(255) default null
 ) ENGINE=InnoDB auto_increment=1 default charset=utf8;
 
+# 用户表
 drop table if exists `t_user`;
 create table `t_user` (
     `id` int(11) not null auto_increment primary key,
@@ -39,6 +41,7 @@ create table `t_user` (
     `locked` varchar(10) default '0'
 ) ENGINE=InnoDB auto_increment=1 default charset=utf8;
 
+# 角色用户关联表
 drop table if exists `t_user_role`;
 create table `t_user_role`(
     `id` int(11) not null auto_increment primary key,
@@ -47,6 +50,7 @@ create table `t_user_role`(
     `description` varchar(255) default null
 )ENGINE=InnoDB auto_increment=1 default charset=utf8;
 
+# 菜单表
 drop table if exists `t_menu`;
 create table `t_menu` (
     `id` int(11) not null auto_increment primary key,
@@ -60,6 +64,7 @@ create table `t_menu` (
     `description` varchar(255) default null
 )  ENGINE=InnoDB auto_increment=1 default charset=utf8;
 
+# 角色菜单关联表
 drop table if exists `t_role_menu`;
 create table `t_role_menu` (
     `id` int(11) not null auto_increment primary key,
@@ -67,6 +72,8 @@ create table `t_role_menu` (
     `menu_code` varchar(255) default '',
     `description` varchar(255) default null
 ) ENGINE=InnoDB auto_increment=1 default charset=utf8;
+
+# 文件上传表
 
 # 系统默认角色
 insert into t_role(role_name, role_code, description) values ('role_admin', 'ROLE_ADMIN', '管理员角色');
