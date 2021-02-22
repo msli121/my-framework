@@ -17,12 +17,15 @@ public class UserEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int id;
+    private String uid;
     private String username;
     private String password;
+    private String birthday;
     private String country;
     private String province;
     private String city;
-    private String sex;
+    private String organization;
+    private String sex = "x";
     private String phone;
     private String email;
     private String salt;
@@ -46,6 +49,16 @@ public class UserEntity implements Serializable {
     }
 
     @Basic
+    @Column(name = "uid")
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    @Basic
     @Column(name = "username")
     public String getUsername() {
         return username;
@@ -63,6 +76,16 @@ public class UserEntity implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Basic
+    @Column(name = "birthday")
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 
     @Basic
@@ -93,6 +116,16 @@ public class UserEntity implements Serializable {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    @Basic
+    @Column(name = "organization")
+    public String getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(String organization) {
+        this.organization = organization;
     }
 
     @Basic

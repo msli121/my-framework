@@ -18,12 +18,15 @@ create table `t_role` (
 drop table if exists `t_user`;
 create table `t_user` (
     `id` int(11) not null auto_increment primary key,
+    `uid` varchar(255) not null unique,
     `username` varchar(255) not null,
     `password` varchar(255) not null,
+    `birthday` varchar(255) default '',
     `country`  varchar(100) default '',
     `province`  varchar(100) default '' ,
     `city`  varchar(100) default '',
-    `sex` varchar(10) default '' comment '普通用户性别，1为男性，2为女性',
+    `organization` varchar(255) default '',
+    `sex` varchar(10) default 'x' comment '用户性别，male为男性，female为女性，x为保密',
     `phone` varchar(50) default '',
     `email` varchar(255)  default '',
     `salt` varchar(255) default '',

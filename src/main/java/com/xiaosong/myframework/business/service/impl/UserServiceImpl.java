@@ -1,11 +1,14 @@
 package com.xiaosong.myframework.business.service.impl;
 
+import com.xiaosong.myframework.business.constant.BusinessConstant;
 import com.xiaosong.myframework.business.dto.UserDtoEntity;
 import com.xiaosong.myframework.business.entity.RoleEntity;
 import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.entity.UserRoleEntity;
+import com.xiaosong.myframework.business.exception.BusinessException;
 import com.xiaosong.myframework.business.service.UserService;
 import com.xiaosong.myframework.business.service.base.BaseService;
+import com.xiaosong.myframework.business.utils.SysRandomUtil;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.context.annotation.Scope;
@@ -72,12 +75,14 @@ public class UserServiceImpl extends BaseService implements UserService {
         return "head-profile-" + randomNumber + ".jpg";
     }
 
+    @Override
     public void updateUserStatus(UserEntity user) {
         UserEntity userInDB = userDao.findByUsername(user.getUsername());
         userInDB.setEnabled(user.getEnabled());
         userDao.save(userInDB);
     }
 
+    @Override
     public UserEntity resetPassword(UserEntity user) {
         UserEntity userInDB = userDao.findByUsername(user.getUsername());
         String salt = new SecureRandomNumberGenerator().nextBytes().toString();
@@ -98,8 +103,25 @@ public class UserServiceImpl extends BaseService implements UserService {
         return userDao.findByUnionId(unionId);
     }
 
+
+    @Override
+    public String generateUid() {
+        int computeTime = 3;
+        while (computeTime > 0) {
+            String randomUid = SysRandomUtil.generateWithCase(BusinessConstant.SYSTEM_UID_LENGTH);
+            UserEntity userInDb = userDao.findByUid(randomUid);
+            if(null == userInDb) {
+                return randomUid;
+            }
+            computeTime --;
+        }
+        throw new BusinessException("001", "系统异常，生成用户UID失败");
+    }
+
     @Override
     public void initNewUser(String password, UserEntity user) {
+        // 生成新用户 UID
+        user.setUid(generateUid());
         // 生成盐,默认长度16位
         String salt = new SecureRandomNumberGenerator().nextBytes().toString();
         // 设置 hash 算法迭代次数
@@ -114,6 +136,8 @@ public class UserServiceImpl extends BaseService implements UserService {
         user.setEnabled("1");
         user.setLocked("0");
     }
+
+
 
     @Override
     @Transactional

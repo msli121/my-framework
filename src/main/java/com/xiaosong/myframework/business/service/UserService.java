@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface UserService {
 
+    String generateUid();
+
     void initNewUser(String password, UserEntity user);
 
     void editUser(UserDtoEntity user);

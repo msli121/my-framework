@@ -12,4 +12,6 @@ public class BusinessConstant {
     // 系统用户登录类别
     public static final String USER_TYPE_WE_CHAT = "weChat";
     public static final String USER_TYPE_PASSWORD = "password";
+    // 用户 uid 起始长度
+    public static final int SYSTEM_UID_LENGTH = 16;
 }

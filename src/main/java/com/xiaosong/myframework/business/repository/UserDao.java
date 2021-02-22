@@ -17,4 +17,6 @@ public interface UserDao  extends JpaRepository<UserEntity,Integer> {
     UserEntity findByOpenId(String openId);
 
     UserEntity findByUnionId(String unionId);
+
+    UserEntity findByUid(String uid);
 }
