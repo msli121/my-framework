@@ -10,6 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
  * @Date 2021/01/26
  */
 
-public interface UploadFileService {
+public interface SysFileService {
     void save(SysFileEntity file);
 }

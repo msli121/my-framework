@@ -10,6 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @Date 2021/01/26
  */
 
-public interface UploadFileDao extends JpaRepository<SysFileEntity, Integer> {
+public interface SysFileDao extends JpaRepository<SysFileEntity, Integer> {
 
 }

@@ -73,8 +73,6 @@ create table `t_role_menu` (
     `description` varchar(255) default null
 ) ENGINE=InnoDB auto_increment=1 default charset=utf8;
 
-# 文件上传表
-
 # 系统默认角色
 insert into t_role(role_name, role_code, description) values ('role_admin', 'ROLE_ADMIN', '管理员角色');
 insert into t_role(role_name, role_code, description) values ('role_dba', 'ROLE_DBA', '数据库管理员角色');
@@ -191,19 +189,19 @@ values ('ROLE_ADMIN', 'PERMISSION_ADMIN', 'admin角色拥有系统后台权限')
        ('ROLE_ADMIN', 'PERMISSION_PDF_VIP', 'admin角色拥有IP用户对pdf接口的访问权限'),
        ('ROLE_ADMIN', 'PERMISSION_PDF_SUPER_VIP', 'admin角色拥有SuperVIP用户对pdf接口的访问权限');
 
-# 新增系统文件表，存储base64编码后的文件
+# 新增系统文件表，存储 base64 编码后的文件
 drop table if exists `t_sys_file`;
 create table `t_sys_file` (
     `id` int(11) not null auto_increment primary key,
-    `user_id` varchar(255) default '',
-    `file_name` varchar(255) default '',
-    `file_size` int,
-    `file_type` varchar(255) default '',
-    `file_data` MEDIUMTEXT default null,
+    `uid` varchar(255) not null comment '用户uid',
+    `file_name` varchar(255) not null comment '文件名',
+    `file_type` varchar(255) not null comment '文件类型',
+    `file_size` int comment '文件大小，单位b',
+    `file_content` MEDIUMTEXT  comment '文件内容',
+    `recognition_content` MEDIUMTEXT  comment '文件识别内容',
+    `source_group` varchar(50) default '' comment '文件源分组，如avatar,ocr,pdf',
     `upload_time` timestamp not null default NOW() comment '上传时间'
 )ENGINE=InnoDB auto_increment=1 default charset=utf8;
-
-
 
 
 

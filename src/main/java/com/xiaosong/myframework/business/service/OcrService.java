@@ -1,5 +1,7 @@
 package com.xiaosong.myframework.business.service;
 
+import com.xiaosong.myframework.business.entity.SysFileEntity;
+
 /**
  * @Description
  * @Author msli
@@ -7,4 +9,6 @@ package com.xiaosong.myframework.business.service;
  */
 public interface OcrService {
     String getOcrRecognitionResult(String url, String jsonData);
+
+    Object getOcrRecognitionResult(String ocrApiUrl, SysFileEntity fileEntity);
 }

@@ -2,12 +2,9 @@ package com.xiaosong.myframework.business.controller;
 
 import com.xiaosong.myframework.business.dto.ApiResult;
 import com.xiaosong.myframework.business.entity.SysFileEntity;
-import com.xiaosong.myframework.business.service.UploadFileService;
+import com.xiaosong.myframework.business.service.SysFileService;
 import com.xiaosong.myframework.system.utils.SysStringUtils;
 import lombok.extern.log4j.Log4j2;
-import net.bytebuddy.asm.Advice;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,14 +31,14 @@ import java.util.UUID;
 public class UploadFileController {
 
     @Autowired
-    UploadFileService uploadFileService;
+    SysFileService sysFileService;
 
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
 
     @PostMapping("/single")
     public ApiResult uploadSinglePicture(@RequestBody SysFileEntity file) {
-        file.setCreateTime(new Timestamp(System.currentTimeMillis()));
-        uploadFileService.save(file);
+        file.setUploadTime(new Timestamp(System.currentTimeMillis()));
+        sysFileService.save(file);
 
         return ApiResult.T("上传成功");
     }

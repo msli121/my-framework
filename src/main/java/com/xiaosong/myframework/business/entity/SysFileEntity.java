@@ -21,11 +21,13 @@ public class SysFileEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int id;
-    private String userId;
+    private String uid;
     private String fileName;
-    private Integer fileSize;
     private String fileType;
-    private String fileData;
+    private Integer fileSize;
+    private String fileContent;
+    private String recognitionContent;
+    private String sourceGroup;
     private Timestamp uploadTime;
 
     @Id
@@ -40,13 +42,13 @@ public class SysFileEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "user_id")
-    public String getUserId() {
-        return userId;
+    @Column(name = "uid")
+    public String getUid() {
+        return uid;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setUid(String userId) {
+        this.uid = userId;
     }
 
     @Basic
@@ -80,23 +82,43 @@ public class SysFileEntity implements Serializable {
     }
 
     @Basic
-    @Column(name = "file_data")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    public String getFileData() {
-        return fileData;
+    @Column(name = "file_content")
+    public String getFileContent() {
+        return fileContent;
     }
 
-    public void setFileData(String fileData) {
-        this.fileData = fileData;
+    public void setFileContent(String fileData) {
+        this.fileContent = fileData;
+    }
+
+    @Basic
+    @Column(name = "recognition_content")
+    public String getRecognitionContent() {
+        return recognitionContent;
+    }
+
+    public void setRecognitionContent(String recognitionContent) {
+        this.recognitionContent = recognitionContent;
+    }
+
+    @Basic
+    @Column(name = "source_group")
+    public String getSourceGroup() {
+        return sourceGroup;
+    }
+
+    public void setSourceGroup(String sourceGroup) {
+        this.sourceGroup = sourceGroup;
     }
 
     @Basic
     @Column(name = "upload_time")
-    public Timestamp getCreateTime() {
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    public Timestamp getUploadTime() {
         return uploadTime;
     }
 
-    public void setCreateTime(Timestamp uploadTime) {
+    public void setUploadTime(Timestamp uploadTime) {
         this.uploadTime = uploadTime;
     }
 
@@ -107,15 +129,15 @@ public class SysFileEntity implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         SysFileEntity that = (SysFileEntity) o;
         return id == that.id &&
-                Objects.equals(userId, that.userId) &&
+                Objects.equals(uid, that.uid) &&
                 Objects.equals(fileName, that.fileName) &&
                 Objects.equals(fileSize, that.fileSize) &&
                 Objects.equals(fileType, that.fileType) &&
-                Objects.equals(fileData, that.fileData);
+                Objects.equals(fileContent, that.fileContent);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, userId, fileName, fileSize, fileType, fileData);
+        return Objects.hash(id, uid, fileName, fileSize, fileType, fileContent);
     }
 }

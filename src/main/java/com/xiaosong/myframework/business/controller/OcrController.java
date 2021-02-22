@@ -7,7 +7,7 @@ import com.xiaosong.myframework.business.controller.base.BaseController;
 import com.xiaosong.myframework.business.dto.ApiResult;
 import com.xiaosong.myframework.business.entity.SysFileEntity;
 import com.xiaosong.myframework.business.service.OcrService;
-import com.xiaosong.myframework.business.service.UploadFileService;
+import com.xiaosong.myframework.business.service.SysFileService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,22 +29,18 @@ import java.util.HashMap;
 @Log4j2
 public class OcrController  extends BaseController {
     @Autowired
-    UploadFileService uploadFileService;
+    SysFileService sysFileService;
 
     @Autowired
     OcrService ocrService;
 
     @PostMapping("/single")
     public ApiResult uploadSinglePicture(@RequestBody SysFileEntity file) {
-        file.setCreateTime(new Timestamp(System.currentTimeMillis()));
-        uploadFileService.save(file);
-        HashMap<String, Object> requestBody = new HashMap<>();
-        ArrayList<String> images = new ArrayList<>();
-        images.add(file.getFileData());
-        requestBody.put("images", images);
-        String ocrResult = ocrService.getOcrRecognitionResult(ocrHostUrl, JSON.toJSONString(requestBody));
-        JSONObject result = JSON.parseObject(ocrResult);
-        JSONArray data = result.getJSONArray("results");
-        return ApiResult.T(data.get(0));
+        file.setUploadTime(new Timestamp(System.currentTimeMillis()));
+        sysFileService.save(file);
+        Object recognitionResult = ocrService.getOcrRecognitionResult(ocrHostUrl, file);
+        file.setRecognitionContent(JSON.toJSONString(recognitionResult));
+        sysFileService.save(file);
+        return ApiResult.T(recognitionResult);
     }
 }
