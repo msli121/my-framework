@@ -9,6 +9,8 @@ import com.xiaosong.myframework.business.exception.BusinessException;
 import com.xiaosong.myframework.business.service.UserService;
 import com.xiaosong.myframework.business.service.base.BaseService;
 import com.xiaosong.myframework.business.utils.SysRandomUtil;
+import org.apache.commons.lang.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.context.annotation.Scope;
@@ -76,9 +78,53 @@ public class UserServiceImpl extends BaseService implements UserService {
     }
 
     @Override
+    public String getUserAvatar(String uid) {
+        UserEntity userInDb;
+        if(StringUtils.isEmpty(uid)) {
+            String username = SecurityUtils.getSubject().getPrincipal().toString();
+            userInDb = userDao.findByUsername(username);
+        } else {
+            userInDb = userDao.findByUid(uid);
+        }
+        if(null == userInDb) {
+            throw new BusinessException("002", "登陆异常，请重新登录");
+        }
+        return userInDb.getAvatar();
+    }
+
+    @Override
     public void updateUserStatus(UserEntity user) {
         UserEntity userInDB = userDao.findByUsername(user.getUsername());
         userInDB.setEnabled(user.getEnabled());
+        userDao.save(userInDB);
+    }
+
+    @Override
+    public void updateUserAvatar(UserEntity user) {
+        if(StringUtils.isEmpty(user.getUid())) {
+            throw new BusinessException("004", "参数异常，缺少UID");
+        }
+        UserEntity userInDB = userDao.findByUid(user.getUid());
+        if(null == userInDB) {
+            throw new BusinessException("002", "登陆异常，请重新登录");
+        }
+        userInDB.setAvatar(user.getAvatar());
+        userDao.save(userInDB);
+    }
+
+    @Override
+    public void updateUserBaseInfo(UserEntity user) {
+        if(StringUtils.isEmpty(user.getUid())) {
+            throw new BusinessException("004", "参数异常，缺少UID");
+        }
+        UserEntity userInDB = userDao.findByUid(user.getUid());
+        if(null == userInDB) {
+            throw new BusinessException("002", "登陆异常，请重新登录");
+        }
+        userInDB.setBirthday(user.getBirthday());
+        userInDB.setCountry(user.getCountry());
+        userInDB.setSex(user.getSex());
+        userInDB.setOrganization(user.getOrganization());
         userDao.save(userInDB);
     }
 

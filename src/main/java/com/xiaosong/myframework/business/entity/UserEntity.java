@@ -20,6 +20,7 @@ public class UserEntity implements Serializable {
     private String uid;
     private String username;
     private String password;
+    private String avatar;
     private String birthday;
     private String country;
     private String province;
@@ -76,6 +77,16 @@ public class UserEntity implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Basic
+    @Column(name = "avatar")
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     @Basic

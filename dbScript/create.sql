@@ -23,6 +23,7 @@ create table `t_user` (
     `uid` varchar(255) not null unique,
     `username` varchar(255) not null,
     `password` varchar(255) not null,
+    `avatar` MEDIUMTEXT  comment '头像，base64编码',
     `birthday` varchar(255) default '',
     `country`  varchar(100) default '',
     `province`  varchar(100) default '' ,

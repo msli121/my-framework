@@ -17,9 +17,15 @@ public interface UserService {
 
     void updateUserStatus(UserEntity user);
 
+    void updateUserAvatar(UserEntity user);
+
+    void updateUserBaseInfo(UserEntity user);
+
     boolean isExist(String username);
 
     String generateSysHeadIconRandom();
+
+    String getUserAvatar(String uid);
 
     UserEntity findEntityByUsername(String username);
 
