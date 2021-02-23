@@ -200,6 +200,7 @@ create table `t_sys_file` (
     `file_content` MEDIUMTEXT  comment '文件内容',
     `recognition_content` MEDIUMTEXT  comment '文件识别内容',
     `source_group` varchar(50) default '' comment '文件源分组，如avatar,ocr,pdf',
+    `star` tinyint(1) default 0 comment '文件是否收藏，0为收藏，1收藏',
     `upload_time` timestamp not null default NOW() comment '上传时间'
 )ENGINE=InnoDB auto_increment=1 default charset=utf8;
 

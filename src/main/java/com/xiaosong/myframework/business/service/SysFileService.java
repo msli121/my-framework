@@ -4,6 +4,8 @@ import com.xiaosong.myframework.business.entity.SysFileEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @Description
  * @Author msli
@@ -11,5 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
  */
 
 public interface SysFileService {
+
+    void editAndSave(SysFileEntity file);
+
     void save(SysFileEntity file);
+
+    List<SysFileEntity> getAllUploadFile();
 }

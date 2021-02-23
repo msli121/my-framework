@@ -28,19 +28,27 @@ import java.util.HashMap;
 @RequestMapping("/api/ocr")
 @Log4j2
 public class OcrController  extends BaseController {
+
     @Autowired
     SysFileService sysFileService;
 
     @Autowired
     OcrService ocrService;
 
-    @PostMapping("/single")
+    @PostMapping("/single-upload")
     public ApiResult uploadSinglePicture(@RequestBody SysFileEntity file) {
         file.setUploadTime(new Timestamp(System.currentTimeMillis()));
         sysFileService.save(file);
         Object recognitionResult = ocrService.getOcrRecognitionResult(ocrHostUrl, file);
         file.setRecognitionContent(JSON.toJSONString(recognitionResult));
         sysFileService.save(file);
-        return ApiResult.T(recognitionResult);
+        return ApiResult.T(file);
     }
+
+    @PostMapping("/edit-save")
+    public ApiResult editAndSaveRecognitionResult(@RequestBody SysFileEntity file) {
+        sysFileService.editAndSave(file);
+        return ApiResult.T("保存成功");
+    }
+
 }

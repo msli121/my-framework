@@ -28,6 +28,7 @@ public class SysFileEntity implements Serializable {
     private String fileContent;
     private String recognitionContent;
     private String sourceGroup;
+    private Boolean star;
     private Timestamp uploadTime;
 
     @Id
