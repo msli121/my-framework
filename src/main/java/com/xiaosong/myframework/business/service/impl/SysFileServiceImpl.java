@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.util.StringUtils;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description
@@ -38,25 +39,48 @@ public class SysFileServiceImpl extends BaseService implements SysFileService {
 
     @Override
     public void save(SysFileEntity file) {
+        UserEntity userInDb;
         if(StringUtils.isEmpty(file.getUid())) {
-            String username = SecurityUtils.getSubject().getPrincipal().toString();
-            UserEntity user = userDao.findByUsername(username);
-            file.setUid(user.getUid());
+            Object principal = SecurityUtils.getSubject().getPrincipal();
+            if(null == principal) {
+                throw new BusinessException("001", "获取用户登录凭证失败，请重新登录");
+            }
+            userInDb = userDao.findByUsername(principal.toString());
+            file.setUid(userInDb.getUid());
         }
         sysFileDao.save(file);
     }
 
     @Override
-    public List<SysFileEntity> getAllUploadFile() {
-        Object principal = SecurityUtils.getSubject().getPrincipal();
-        if(null == principal) {
-            throw new BusinessException("001", "系统异常，无法获取获取用户登陆凭证");
+    public void setFileStar(Integer fileId) {
+        if(null == fileId ) {
+            throw new BusinessException("004", "参数异常，缺少文件ID");
         }
-        UserEntity userInDb = userDao.findByUsername(principal.toString());
-        if(null == userInDb) {
-            throw new BusinessException("002", "登陆异常，请重新登录");
+        sysFileDao.setFileStar(fileId);
+    }
+
+    @Override
+    public void cancelFileStar(Integer fileId) {
+        if(null == fileId ) {
+            throw new BusinessException("004", "参数异常，缺少文件ID");
         }
-        List<SysFileEntity> allFile = sysFileDao.findAllByUid(userInDb.getUid());
+        sysFileDao.cancelFileStar(fileId);
+    }
+
+    @Override
+    public void deleteFile(Integer fileId) {
+        if(null == fileId ) {
+            throw new BusinessException("004", "参数异常，缺少文件ID");
+        }
+        sysFileDao.deleteById(fileId);
+    }
+
+    @Override
+    public List<SysFileEntity> getAllUploadFile(String uid) {
+        if(org.apache.commons.lang.StringUtils.isEmpty(uid)) {
+            throw new BusinessException("004", "参数异常，缺少UID");
+        }
+        List<SysFileEntity> allFile = sysFileDao.findAllByUid(uid);
         return allFile;
     }
 

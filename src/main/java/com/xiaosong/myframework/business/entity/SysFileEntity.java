@@ -123,6 +123,15 @@ public class SysFileEntity implements Serializable {
         this.uploadTime = uploadTime;
     }
 
+    @Basic
+    @Column(name = "star")
+    public Boolean getStar() {
+        return star;
+    }
+
+    public void setStar(Boolean star) {
+        this.star = star;
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -6,6 +6,7 @@ import com.xiaosong.myframework.business.entity.RoleEntity;
 import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.entity.UserRoleEntity;
 import com.xiaosong.myframework.business.exception.BusinessException;
+import com.xiaosong.myframework.business.response.UserProfileEntity;
 import com.xiaosong.myframework.business.service.UserService;
 import com.xiaosong.myframework.business.service.base.BaseService;
 import com.xiaosong.myframework.business.utils.SysRandomUtil;
@@ -93,6 +94,21 @@ public class UserServiceImpl extends BaseService implements UserService {
     }
 
     @Override
+    public UserProfileEntity getUserBaseInfo(String uid) {
+        UserEntity userInDb;
+        if(StringUtils.isEmpty(uid)) {
+            String username = SecurityUtils.getSubject().getPrincipal().toString();
+            userInDb = userDao.findByUsername(username);
+        } else {
+            userInDb = userDao.findByUid(uid);
+        }
+        if(null == userInDb) {
+            throw new BusinessException("002", "登陆异常，请重新登录");
+        }
+        return new UserProfileEntity(userInDb);
+    }
+
+    @Override
     public void updateUserStatus(UserEntity user) {
         UserEntity userInDB = userDao.findByUsername(user.getUsername());
         userInDB.setEnabled(user.getEnabled());
@@ -109,6 +125,7 @@ public class UserServiceImpl extends BaseService implements UserService {
             throw new BusinessException("002", "登陆异常，请重新登录");
         }
         userInDB.setAvatar(user.getAvatar());
+        userInDB.setUseAvatar(true);
         userDao.save(userInDB);
     }
 
@@ -123,6 +140,7 @@ public class UserServiceImpl extends BaseService implements UserService {
         }
         userInDB.setBirthday(user.getBirthday());
         userInDB.setCountry(user.getCountry());
+        userInDB.setCity(user.getCity());
         userInDB.setSex(user.getSex());
         userInDB.setOrganization(user.getOrganization());
         userDao.save(userInDB);

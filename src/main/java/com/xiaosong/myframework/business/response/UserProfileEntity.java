@@ -22,6 +22,7 @@ public class UserProfileEntity implements Serializable {
     private String sex;
     private String email;
     private String userType;
+    private Boolean useAvatar;
     // 微信相关
     private String openId;
     private String unionId;
@@ -41,6 +42,7 @@ public class UserProfileEntity implements Serializable {
         this.sex = user.getSex();
         this.email = user.getEmail();
         this.userType = user.getUserType();
+        this.useAvatar = user.getUseAvatar();
         this.openId = user.getOpenId();
         this.unionId = user.getUnionId();
         this.headImgUrl = user.getHeadImgUrl();

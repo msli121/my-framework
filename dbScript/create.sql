@@ -24,6 +24,7 @@ create table `t_user` (
     `username` varchar(255) not null,
     `password` varchar(255) not null,
     `avatar` MEDIUMTEXT  comment '头像，base64编码',
+    `use_avatar` tinyint(1) default 0 comment '是否使用自定义头像，0为不使用，1为使用',
     `birthday` varchar(255) default '',
     `country`  varchar(100) default '',
     `province`  varchar(100) default '' ,

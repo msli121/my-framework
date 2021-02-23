@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Description
@@ -18,5 +19,11 @@ public interface SysFileService {
 
     void save(SysFileEntity file);
 
-    List<SysFileEntity> getAllUploadFile();
+    void setFileStar(Integer fileId);
+
+    void cancelFileStar(Integer fileId);
+
+    void deleteFile(Integer fileId);
+
+    List<SysFileEntity> getAllUploadFile(String uid);
 }

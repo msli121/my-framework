@@ -137,6 +137,7 @@ public class LoginServiceImpl extends BaseService implements LoginService {
             user.setProvince(userInfo.getString("province"));
             user.setCity(userInfo.getString("city"));
             user.setHeadImgUrl(userInfo.getString("headimgurl"));
+            user.setAvatar(userInfo.getString("headimgurl"));
             user.setUnionId(userInfo.getString("unionid"));
             user.setUserType(BusinessConstant.USER_TYPE_WE_CHAT);
             // 用户信息初始化

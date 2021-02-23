@@ -2,6 +2,7 @@ package com.xiaosong.myframework.business.service;
 
 import com.xiaosong.myframework.business.dto.UserDtoEntity;
 import com.xiaosong.myframework.business.entity.UserEntity;
+import com.xiaosong.myframework.business.response.UserProfileEntity;
 
 import java.util.List;
 
@@ -26,6 +27,8 @@ public interface UserService {
     String generateSysHeadIconRandom();
 
     String getUserAvatar(String uid);
+
+    UserProfileEntity getUserBaseInfo(String uid);
 
     UserEntity findEntityByUsername(String username);
 

@@ -14,7 +14,17 @@ public class UserController {
     UserService userService;
 
     /**
-     * 重置秘密
+     * 获取用户基本信息
+     * @param uid
+     * @return
+     */
+    @GetMapping("/base-info/{uid}")
+    public ApiResult getUserBaseInfo(@PathVariable String uid) {
+        return ApiResult.T(userService.getUserBaseInfo(uid));
+    }
+
+    /**
+     * 重置密码
      * @param user
      * @return
      */
