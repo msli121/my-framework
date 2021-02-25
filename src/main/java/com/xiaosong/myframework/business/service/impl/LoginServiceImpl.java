@@ -113,7 +113,7 @@ public class LoginServiceImpl extends BaseService implements LoginService {
         String openId = jsonResult.getString("openid");
         String unionId = jsonResult.getString("unionId");
         if(StringUtils.isEmpty(accessToken) || StringUtils.isEmpty(openId)) {
-            throw new BusinessException("", "获取accessToken失败，请重新扫码");
+            throw new BusinessException("001", "获取accessToken失败，请重新扫码");
         }
         UserEntity user = null;
         user = userDao.findByOpenId(openId);

@@ -32,7 +32,7 @@ public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler(value = BusinessException.class)
     public ApiResult sysBaseExceptionHandler(BusinessException e) {
-        log.error(e.getMessage()+"test", e);
+        log.error(e.getMessage(), e);
         return ApiResult.F(e.getErrorCode(), e.getMessage());
     }
 
