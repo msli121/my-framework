@@ -4,6 +4,7 @@ import com.xiaosong.myframework.business.dto.UserDtoEntity;
 import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.response.UserProfileEntity;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface UserService {
@@ -22,15 +23,19 @@ public interface UserService {
 
     void updateUserBaseInfo(UserEntity user);
 
-    boolean isExist(String username);
+    boolean checkExistByUsername(String username);
+
+    boolean checkExistByEmail(String email);
 
     String generateSysHeadIconRandom();
 
     String getUserAvatar(String uid);
 
-    UserProfileEntity getUserBaseInfo(String uid);
+    UserProfileEntity getUserBaseInfo(String uid) throws UnsupportedEncodingException;
 
-    UserEntity findEntityByUsername(String username);
+    UserEntity findUserByUsername(String username);
+
+    UserEntity findUserByEmail(String email);
 
     UserEntity resetPassword(UserEntity user);
 

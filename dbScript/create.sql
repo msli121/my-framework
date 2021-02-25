@@ -22,6 +22,7 @@ create table `t_user` (
     `id` int(11) not null auto_increment primary key,
     `uid` varchar(255) not null unique,
     `username` varchar(255) not null,
+    `has_emoji` tinyint(1) default 0 comment '昵称中是否包含emoji，0为包含，1为包含',
     `password` varchar(255) not null,
     `avatar` MEDIUMTEXT  comment '头像，base64编码',
     `use_avatar` tinyint(1) default 0 comment '是否使用自定义头像，0为不使用，1为使用',

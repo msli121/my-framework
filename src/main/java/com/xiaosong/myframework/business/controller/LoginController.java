@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * @Description
  * @Author msli
@@ -51,7 +53,7 @@ public class LoginController {
      * @return
      */
     @PostMapping(value = "/login/we-chat")
-    public ApiResult loginByWeChat(@RequestBody WeChatLoginDtoEntity loginDtoEntity) {
+    public ApiResult loginByWeChat(@RequestBody WeChatLoginDtoEntity loginDtoEntity) throws UnsupportedEncodingException {
         UserEntity currentUser = loginService.getUserInfoByWeChat(loginDtoEntity);
         UserProfileEntity userProfile = loginService.login(currentUser, BusinessConstant.USER_TYPE_WE_CHAT);
         return ApiResult.T("", "微信登录成功", userProfile);

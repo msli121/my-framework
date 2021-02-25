@@ -47,7 +47,7 @@ public class SysRealm extends AuthorizingRealm {
         UserEntity existedUser = null;
         String principal = token.getPrincipal().toString();
         // 先通过username查找用户
-        existedUser = userService.findEntityByUsername(principal);
+        existedUser = userService.findUserByUsername(principal);
         // 不存在再通过openId查找
         if(ObjectUtils.isEmpty(existedUser)) {
             existedUser = userService.findEntityByOpenId(principal);

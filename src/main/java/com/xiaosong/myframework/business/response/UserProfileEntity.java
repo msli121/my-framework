@@ -2,8 +2,11 @@ package com.xiaosong.myframework.business.response;
 
 import com.xiaosong.myframework.business.entity.UserEntity;
 import lombok.Data;
+import org.apache.commons.codec.binary.Base64;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 @Data
 public class UserProfileEntity implements Serializable {
@@ -28,10 +31,10 @@ public class UserProfileEntity implements Serializable {
     private String unionId;
     private String headImgUrl;
 
-    public UserProfileEntity(UserEntity user) {
+    public UserProfileEntity(UserEntity user) throws UnsupportedEncodingException {
         this.id = user.getId();
         this.uid = user.getUid();
-        this.username = user.getUsername();
+        this.username = user.getHasEmoji() ? new String(Base64.decodeBase64(user.getUsername()), StandardCharsets.UTF_8) : user.getUsername();
         this.avatar = user.getAvatar();
         this.birthday = user.getBirthday();
         this.sysHeadIcon = user.getSysHeadIcon();

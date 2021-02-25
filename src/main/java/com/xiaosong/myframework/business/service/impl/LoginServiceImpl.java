@@ -3,8 +3,6 @@ package com.xiaosong.myframework.business.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xiaosong.myframework.business.constant.BusinessConstant;
-import com.xiaosong.myframework.business.dto.ApiResult;
-import com.xiaosong.myframework.business.dto.UserDtoEntity;
 import com.xiaosong.myframework.business.dto.WeChatLoginDtoEntity;
 import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.exception.BusinessException;
@@ -12,8 +10,10 @@ import com.xiaosong.myframework.business.response.UserProfileEntity;
 import com.xiaosong.myframework.business.service.LoginService;
 import com.xiaosong.myframework.business.service.UserService;
 import com.xiaosong.myframework.business.service.base.BaseService;
+import com.xiaosong.myframework.business.utils.EmojiUtils;
 import com.xiaosong.myframework.system.utils.SysHttpUtils;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -23,6 +23,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * @Description
@@ -46,32 +49,38 @@ public class LoginServiceImpl extends BaseService implements LoginService {
     }
 
     @Override
-    public UserProfileEntity login(UserEntity user, String userType) {
+    public UserProfileEntity login(UserEntity requestUser, String userType) {
         Subject subject = SecurityUtils.getSubject();
         // 设置会话过期时间 默认30分钟
         // subject.getSession().setTimeout(1800000);
-        UsernamePasswordToken token = null;
+        UsernamePasswordToken token;
         UserEntity userInDB = null;
-        String principal = null;
         if(userType.equals(BusinessConstant.USER_TYPE_WE_CHAT)) {
-            // 通过 weChat 登录
-            // 使用 openId 和 系统默认密码 生成 token
-            token = new UsernamePasswordToken(user.getOpenId(), BusinessConstant.WE_CHAT_USER_DEFAULT_PASSWORD);
-            userInDB = userService.findEntityByOpenId(user.getOpenId());
-            principal = user.getOpenId();
+            // weChat 登录，通过 openId 查询用户
+            userInDB = userService.findEntityByOpenId(requestUser.getOpenId());
         } else {
-            // 通过用户名密码登录
-            token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
-            userInDB = userService.findEntityByUsername(user.getUsername());
-            principal = user.getUsername();
+            // 密码登录，通过用户名或邮箱查询用户
+            if(StringUtils.isNotEmpty(requestUser.getUsername())) {
+                userInDB = userService.findUserByUsername(requestUser.getUsername());
+            }
+            if(null != userInDB && StringUtils.isNotEmpty(requestUser.getEmail())) {
+                userInDB = userService.findUserByEmail(requestUser.getEmail());
+            }
         }
         if(userInDB == null) {
-            log.info("用户 [ " + principal + " ] 不存在");
-            throw new BusinessException("", "该用户不存在，请先注册");
+            log.info("用户不存在");
+            throw new BusinessException("003", "该用户不存在，请先注册");
         }
         if("1".equals(userInDB.getLocked())) {
-            log.info("用户 [ " + principal + " ] 已经被禁用");
-            throw new BusinessException("", "该用户已被禁用");
+            log.info("用户已经被禁用");
+            throw new BusinessException("003", "该用户已被禁用");
+        }
+        if(userType.equals(BusinessConstant.USER_TYPE_WE_CHAT)) {
+            // 使用 uid 和 微信用户默认密码 生成 token
+            token = new UsernamePasswordToken(userInDB.getUid(), BusinessConstant.WE_CHAT_USER_DEFAULT_PASSWORD);
+        } else {
+            // 使用 uid 和 密码 生成 token
+            token = new UsernamePasswordToken(userInDB.getUid(), requestUser.getPassword());
         }
         token.setRememberMe(true);
         try {
@@ -79,16 +88,29 @@ public class LoginServiceImpl extends BaseService implements LoginService {
             // TODO 获取用户角色信息
             return new UserProfileEntity(userInDB);
         } catch (AuthenticationException e) {
-            log.info("用户 [ " + principal + " ] 登录失败，请重新登录");
+            log.info("用户 [ " + userInDB.getUid() + " ] 登录失败，请重新登录");
+            throw new BusinessException("", "登录失败，请重新登录");
+        } catch (UnsupportedEncodingException e) {
+            log.info("系统异常，解码昵称失败");
             throw new BusinessException("", "登录失败，请重新登录");
         }
     }
 
     @Override
     public void passwordRegistry(UserEntity user) {
-        boolean exist = userService.isExist(user.getUsername());
-        if (exist) {
-            throw new BusinessException("", "用户名已被使用");
+        boolean userNameExist = false;
+        boolean emailExist = false;
+        if(StringUtils.isNotEmpty(user.getUsername())) {
+            userNameExist = userService.checkExistByUsername(user.getUsername());
+        }
+        if(StringUtils.isNotEmpty(user.getEmail())) {
+            emailExist = userService.checkExistByEmail(user.getEmail());
+        }
+        if(userNameExist) {
+            throw new BusinessException("003", "用户名已被使用");
+        }
+        if(emailExist) {
+            throw new BusinessException("003", "邮箱已被注册");
         }
         // 初始化用户类别
         user.setUserType(BusinessConstant.USER_TYPE_PASSWORD);
@@ -98,7 +120,7 @@ public class LoginServiceImpl extends BaseService implements LoginService {
     }
 
     @Override
-    public UserEntity getUserInfoByWeChat(WeChatLoginDtoEntity loginDtoEntity) {
+    public UserEntity getUserInfoByWeChat(WeChatLoginDtoEntity loginDtoEntity) throws UnsupportedEncodingException {
         if(!checkWeChatWebDtoParams(loginDtoEntity)) {
             throw new BusinessException("", "参数不完整，缺少appId或code");
         }
@@ -111,7 +133,7 @@ public class LoginServiceImpl extends BaseService implements LoginService {
         JSONObject jsonResult = JSONObject.parseObject(accessTokenResult);
         String accessToken = jsonResult.getString("access_token");
         String openId = jsonResult.getString("openid");
-        String unionId = jsonResult.getString("unionId");
+        String unionId = jsonResult.getString("unionid");
         if(StringUtils.isEmpty(accessToken) || StringUtils.isEmpty(openId)) {
             throw new BusinessException("001", "获取accessToken失败，请重新扫码");
         }
@@ -130,7 +152,18 @@ public class LoginServiceImpl extends BaseService implements LoginService {
                 throw new BusinessException("", userInfo.getString("errmsg"));
             }
             user = new UserEntity();
-            user.setUsername(userInfo.getString("nickname"));
+            // 生成用户唯一标识 UID
+            user.setUid(userService.generateUid());
+            // 设置昵称
+            String nickname = userInfo.getString("nickname");
+            if(EmojiUtils.hasEmoji(nickname)) {
+                // 存储 base64 编码后的字符串
+                String base64Nickname = Base64.encodeBase64String(nickname.getBytes(StandardCharsets.UTF_8));
+                user.setUsername(base64Nickname);
+                user.setHasEmoji(true);
+            } else {
+                user.setUsername(nickname);
+            }
             user.setOpenId(openId);
             user.setSex(userInfo.getString("sex"));
             user.setCountry(userInfo.getString("country"));

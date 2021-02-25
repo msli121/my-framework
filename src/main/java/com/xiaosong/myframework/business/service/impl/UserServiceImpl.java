@@ -10,6 +10,7 @@ import com.xiaosong.myframework.business.response.UserProfileEntity;
 import com.xiaosong.myframework.business.service.UserService;
 import com.xiaosong.myframework.business.service.base.BaseService;
 import com.xiaosong.myframework.business.utils.SysRandomUtil;
+import org.apache.catalina.User;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
@@ -20,6 +21,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -53,14 +55,25 @@ public class UserServiceImpl extends BaseService implements UserService {
     }
 
     @Override
-    public boolean isExist(String username) {
-        UserEntity user = this.findEntityByUsername(username);
-        return null!=user;
+    public boolean checkExistByUsername(String username) {
+        UserEntity user = this.findUserByUsername(username);
+        return null != user;
     }
 
     @Override
-    public UserEntity findEntityByUsername(String username) {
+    public boolean checkExistByEmail(String email) {
+        UserEntity user = this.findUserByEmail(email);
+        return null != user;
+    }
+
+    @Override
+    public UserEntity findUserByUsername(String username) {
         return userDao.findByUsername(username);
+    }
+
+    @Override
+    public UserEntity findUserByEmail(String email) {
+        return userDao.findByEmail(email);
     }
 
 
@@ -94,7 +107,7 @@ public class UserServiceImpl extends BaseService implements UserService {
     }
 
     @Override
-    public UserProfileEntity getUserBaseInfo(String uid) {
+    public UserProfileEntity getUserBaseInfo(String uid) throws UnsupportedEncodingException {
         UserEntity userInDb;
         if(StringUtils.isEmpty(uid)) {
             String username = SecurityUtils.getSubject().getPrincipal().toString();

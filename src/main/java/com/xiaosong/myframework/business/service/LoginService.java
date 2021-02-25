@@ -5,6 +5,8 @@ import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.response.UserProfileEntity;
 import org.apache.catalina.User;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * @Description
  * @Author msli
@@ -16,5 +18,5 @@ public interface LoginService {
 
     void passwordRegistry(UserEntity user);
 
-    UserEntity getUserInfoByWeChat(WeChatLoginDtoEntity loginDtoEntity);
+    UserEntity getUserInfoByWeChat(WeChatLoginDtoEntity loginDtoEntity) throws UnsupportedEncodingException;
 }
