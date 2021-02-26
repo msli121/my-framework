@@ -3,6 +3,7 @@ package com.xiaosong.myframework.business.response;
 import com.xiaosong.myframework.business.entity.UserEntity;
 import lombok.Data;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.BooleanUtils;
 
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -34,7 +35,7 @@ public class UserProfileEntity implements Serializable {
     public UserProfileEntity(UserEntity user) throws UnsupportedEncodingException {
         this.id = user.getId();
         this.uid = user.getUid();
-        this.username = user.getHasEmoji() ? new String(Base64.decodeBase64(user.getUsername()), StandardCharsets.UTF_8) : user.getUsername();
+        this.username = BooleanUtils.isTrue(user.getHasEmoji()) ? new String(Base64.decodeBase64(user.getUsername()), StandardCharsets.UTF_8) : user.getUsername();
         this.avatar = user.getAvatar();
         this.birthday = user.getBirthday();
         this.sysHeadIcon = user.getSysHeadIcon();

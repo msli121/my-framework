@@ -143,7 +143,6 @@ public class UserServiceImpl extends BaseService implements UserService {
             throw new BusinessException("002", "登陆异常，请重新登录");
         }
         userInDB.setAvatar(user.getAvatar());
-        userInDB.setUseAvatar(true);
         userDao.save(userInDB);
     }
 

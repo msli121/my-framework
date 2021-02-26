@@ -5,8 +5,8 @@ server:
 #    context-path:
   tomcat:
     uri-encoding: UTF-8
-logging:
-  config: classpath:log4j2.xml
+#logging:
+#  config: classpath:log4j2.xml
 spring:
   application:
     name: ocr-backend

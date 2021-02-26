@@ -19,10 +19,9 @@ public class UserEntity implements Serializable {
     private int id;
     private String uid;
     private String username;
-    private Boolean hasEmoji;
+    private Boolean hasEmoji = false;
     private String password;
     private String avatar;
-    private Boolean useAvatar;
     private String birthday;
     private String country;
     private String province;
@@ -99,16 +98,6 @@ public class UserEntity implements Serializable {
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
-    }
-
-    @Basic
-    @Column(name = "use_avatar")
-    public Boolean getUseAvatar() {
-        return useAvatar;
-    }
-
-    public void setUseAvatar(Boolean useAvatar) {
-        this.useAvatar = useAvatar;
     }
 
     @Basic

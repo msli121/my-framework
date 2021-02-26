@@ -165,7 +165,7 @@ public class LoginServiceImpl extends BaseService implements LoginService {
                 user.setHasEmoji(true);
             }
             user.setOpenId(openId);
-            user.setSex(userInfo.getString("sex"));
+            user.setSex(userInfo.getString("sex").equals("1") ? "male" : userInfo.getString("sex").equals("2") ? "female" : "x");
             user.setCountry(userInfo.getString("country"));
             user.setProvince(userInfo.getString("province"));
             user.setCity(userInfo.getString("city"));
