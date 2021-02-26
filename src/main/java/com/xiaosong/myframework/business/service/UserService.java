@@ -35,6 +35,8 @@ public interface UserService {
 
     UserEntity findUserByUsername(String username);
 
+    UserEntity findUserByUid(String uid);
+
     UserEntity findUserByEmail(String email);
 
     UserEntity resetPassword(UserEntity user);

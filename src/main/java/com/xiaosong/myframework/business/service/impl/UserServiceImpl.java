@@ -72,6 +72,11 @@ public class UserServiceImpl extends BaseService implements UserService {
     }
 
     @Override
+    public UserEntity findUserByUid(String uid) {
+        return userDao.findByUid(uid);
+    }
+
+    @Override
     public UserEntity findUserByEmail(String email) {
         return userDao.findByEmail(email);
     }

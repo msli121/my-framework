@@ -156,13 +156,13 @@ public class LoginServiceImpl extends BaseService implements LoginService {
             user.setUid(userService.generateUid());
             // 设置昵称
             String nickname = userInfo.getString("nickname");
-            if(EmojiUtils.hasEmoji(nickname)) {
+            if(EmojiUtils.checkUsername(nickname)) {
+                user.setUsername(nickname);
+            } else {
                 // 存储 base64 编码后的字符串
                 String base64Nickname = Base64.encodeBase64String(nickname.getBytes(StandardCharsets.UTF_8));
                 user.setUsername(base64Nickname);
                 user.setHasEmoji(true);
-            } else {
-                user.setUsername(nickname);
             }
             user.setOpenId(openId);
             user.setSex(userInfo.getString("sex"));
@@ -177,7 +177,6 @@ public class LoginServiceImpl extends BaseService implements LoginService {
             userService.initNewUser(BusinessConstant.WE_CHAT_USER_DEFAULT_PASSWORD, user);
             userDao.save(user);
             // TODO 给新用户增加默认角色
-
         }
         return user;
     }
