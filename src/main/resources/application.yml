@@ -26,8 +26,8 @@ spring:
       enabled: true
       file-size-threshold: 0
       location: uploadFiles/
-      max-file-size: 2MB
-      max-request-size: 10MB
+      max-file-size: 10MB
+      max-request-size: 20MB
       resolve-lazily: false
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
@@ -64,7 +64,7 @@ ocr:
   appId: wx32e95d3c6fbe4913
   appSecret: e46c212fb7e9fd121dedfab4c0942d21
 pdf:
-  url: http://47.117.127.63:8868/predict/ocr_system
+  url: http://47.117.127.63:2234/detect
 
 
 

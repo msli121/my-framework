@@ -5,14 +5,15 @@ import com.xiaosong.myframework.business.controller.base.BaseController;
 import com.xiaosong.myframework.business.dto.ApiResult;
 import com.xiaosong.myframework.business.entity.SysFileEntity;
 import com.xiaosong.myframework.business.service.OcrService;
+import com.xiaosong.myframework.business.service.PdfService;
 import com.xiaosong.myframework.business.service.SysFileService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.sql.Timestamp;
 
 /**
@@ -21,24 +22,19 @@ import java.sql.Timestamp;
  * @Date 2021/01/26
  */
 @RestController
-@RequestMapping("/api/ocr")
+@RequestMapping("/api/pdf")
 @Log4j2
-public class OcrController  extends BaseController {
+public class PdfController extends BaseController {
 
     @Autowired
     SysFileService sysFileService;
 
     @Autowired
-    OcrService ocrService;
+    PdfService pdfService;
 
-    @PostMapping("/single-upload")
-    public ApiResult uploadSinglePicture(@RequestBody SysFileEntity file) {
-        file.setUploadTime(new Timestamp(System.currentTimeMillis()));
-        sysFileService.save(file);
-        Object recognitionResult = ocrService.getOcrRecognitionResult(ocrApiUrl, file);
-        file.setRecognitionContent(JSON.toJSONString(recognitionResult));
-        sysFileService.save(file);
-        return ApiResult.T(file);
+    @PostMapping("/pdf-upload")
+    public ApiResult uploadPdfFile(@RequestParam(value="uid") String uid, @RequestParam("file") MultipartFile file) throws IOException {
+        return ApiResult.T(pdfService.getOcrRecognitionResult(file, uid, pdfApiUrl));
     }
 
     @PostMapping("/edit-save")

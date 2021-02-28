@@ -9,5 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
  */
 public class BaseController {
     @Value("${ocr.url}")
-    protected String ocrHostUrl;
+    protected String ocrApiUrl;
+
+    @Value("${pdf.url}")
+    protected String pdfApiUrl;
 }
