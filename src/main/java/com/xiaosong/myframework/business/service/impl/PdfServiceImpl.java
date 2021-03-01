@@ -82,6 +82,18 @@ public class PdfServiceImpl extends BaseService implements PdfService {
         return results;
     }
 
+    @Override
+    public List<HashMap<String, Object>> recogniseUrlPdfFivePageWithoutLogin(String pdfUrl, String pdfApiUrl) throws IOException {
+        if (StringUtils.isEmpty(pdfUrl)) {
+            throw new BusinessException("003", "参数异常，缺少文件链接");
+        }
+        // 通过 url 获取文件
+        PDDocument pdfDoc = readPdfFromUrl(pdfUrl);
+        List<HashMap<String, Object>> results = getOriginalFivePageRecognitionResult(pdfDoc, 5, pdfApiUrl);
+        PdfOperationUtil.close(pdfDoc);
+        return results;
+    }
+
 
     /**
      * 返回前 n 页识别结果

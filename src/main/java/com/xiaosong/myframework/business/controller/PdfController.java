@@ -41,9 +41,26 @@ public class PdfController extends BaseController {
         return ApiResult.T(pdfService.recognisePdfFivePage(file, uid, pdfApiUrl));
     }
 
+    /**
+     * 识别上传的PDF文件的前5页 url  需要登录
+     * @param map
+     * @return
+     * @throws IOException
+     */
     @PostMapping("/recognition/five-page-url")
     public ApiResult recogniseUrlPdfFivePage(@RequestBody Map map) throws IOException {
         return ApiResult.T(pdfService.recogniseUrlPdfFivePage(map, pdfApiUrl));
+    }
+
+    /**
+     * 识别上传的PDF文件的前5页 url  无需登录
+     * @param pdfUrl
+     * @return
+     * @throws IOException
+     */
+    @PostMapping("/recognition/five-page-url/direct")
+    public ApiResult recogniseUrlPdfFivePageWithoutLogin(@RequestBody String pdfUrl) throws IOException {
+        return ApiResult.T(pdfService.recogniseUrlPdfFivePageWithoutLogin(pdfUrl, pdfApiUrl));
     }
 
     @PostMapping("/edit-save")
