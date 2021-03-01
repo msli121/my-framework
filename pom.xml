@@ -111,8 +111,13 @@
         <!-- pdfbox -->
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
-            <artifactId>pdfbox-app</artifactId>
-            <version>2.0.21</version>
+            <artifactId>fontbox</artifactId>
+            <version>2.0.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>2.0.4</version>
         </dependency>
         <!--单元测试-->
         <dependency>
