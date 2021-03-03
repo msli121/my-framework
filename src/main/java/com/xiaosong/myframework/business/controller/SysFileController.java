@@ -1,23 +1,17 @@
 package com.xiaosong.myframework.business.controller;
 
+import com.xiaosong.myframework.business.controller.base.BaseController;
 import com.xiaosong.myframework.business.dto.ApiResult;
 import com.xiaosong.myframework.business.entity.SysFileEntity;
-import com.xiaosong.myframework.business.exception.BusinessException;
 import com.xiaosong.myframework.business.service.SysFileService;
-import com.xiaosong.myframework.system.utils.SysStringUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
 
 /**
  * @Description
@@ -27,22 +21,27 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/file")
 @Log4j2
-public class SysFileController {
-
-    // 设置固定的日期格式
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+public class SysFileController extends BaseController {
 
     @Autowired
     SysFileService sysFileService;
 
     /**
-     * 上传单个文件到服务器，保存在服务器本地
+     * 上传文件到服务器，保存在服务器本地
      */
     @PostMapping("/upload")
-    public ApiResult uploadFileToLoaclServer(@RequestParam(value="uid") String uid, @RequestParam("file") MultipartFile file) {
-        return ApiResult.T();
+    public ApiResult uploadFileToLocalServer(@RequestParam(value="uid") String uid, @RequestParam("file") MultipartFile[] files) {
+        return ApiResult.T(sysFileService.uploadFileToLocalServer(uid, files, dnsUrl));
     }
 
+    /**
+     * 下载服务器本地的文件
+     */
+    @GetMapping("/download")
+    public ApiResult downLoadFile(@RequestParam(value="fileName") String fileName, @RequestParam(value="uid") String uid, HttpServletResponse response) {
+        sysFileService.downloadLocalServerFile(uid, fileName, response);
+        return ApiResult.T("下载成功");
+    }
 
 
     /**

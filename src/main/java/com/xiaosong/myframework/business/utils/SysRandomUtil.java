@@ -28,8 +28,23 @@ public class SysRandomUtil {
         Random random = new Random();
         for(int i=0; i < strLength; i++) {
             int index = random.nextInt(GENERATE_SOURCE_LEN);
-           randomBuffer.append(GENERATE_SOURCE[index]);
+            randomBuffer.append(GENERATE_SOURCE[index]);
         }
         return randomBuffer.toString();
+    }
+
+    /**
+     * 随机生成指定长度的字符串
+     * @param length
+     * @return
+     */
+    public static String getRandomString(int length) {
+        Random random = new Random();
+        StringBuffer sb = new StringBuffer();
+        for (int i=0; i< length; i++) {
+            int index = random.nextInt(GENERATE_SOURCE_LEN);
+            sb.append(GENERATE_SOURCE[index]);
+        }
+        return sb.toString();
     }
 }

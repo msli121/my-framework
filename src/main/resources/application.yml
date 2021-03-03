@@ -8,10 +8,10 @@ server:
 #logging:
 #  config: classpath:log4j2.xml
 spring:
+  profiles:
+    active: dev
   application:
     name: ocr-backend
-  #  main:
-#    allow-bean-definition-overriding: true
   thymeleaf:
     cache: true
     check-template: true
@@ -29,22 +29,6 @@ spring:
       max-file-size: 10MB
       max-request-size: 20MB
       resolve-lazily: false
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-#    driver-class-name: com.mysql.jdbc.Driver
-    # local
-#    url: jdbc:mysql://localhost:3306/xiaosong?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-#    username: root
-#    password: 2.71828
-    # aliyun
-    url: jdbc:mysql://47.117.127.63:3306/ocr?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-    username: ocr
-    password: Ocr@123456
-    # tencent
-#    url: jdbc:mysql://118.25.7.154:3306/ocr?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-#    username: root
-#    password: yanZq2020.
-
   jpa:
     show-sql: true
     database: mysql
@@ -52,12 +36,6 @@ spring:
       ddl-auto: update
     properties:
       dialect: org.hibernate.dialect.MySQL57Dialect
-#  security:
-#    user:
-#      name: xiaosong
-#      password: 2.71828
-#      roles: admin
-
 
 ocr:
   url: http://47.117.127.63:8868/predict/ocr_system

@@ -9,6 +9,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +34,15 @@ public class SysWebMvcConfig implements WebMvcConfigurer {
         String os = System.getProperty("os.name");
         String fileRootPath = "";
         if(os.toLowerCase().startsWith("win")) {
-            fileRootPath = "D:/ocr/user-file/";
+            fileRootPath = "D:"+ File.separator+"ocr-file"+File.separator+"public"+File.separator;
         } else {
-            fileRootPath = "/home/msli/wwwapps/ocr/user-file/";
+            fileRootPath = "/home/msli/wwwapps/ocr-file/public/";
         }
-        registry.addResourceHandler("/api/file/**")
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("classpath:/static/");
+        registry.addResourceHandler("/public/")
                 .addResourceLocations("file:" + fileRootPath);
+
     }
 
     /**

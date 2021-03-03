@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +18,9 @@ import java.util.Map;
 
 public interface SysFileService {
 
-    String uploadSingeFileToLocalServer(String uid, MultipartFile multipartFile);
+    List<String> uploadFileToLocalServer(String uid, MultipartFile[] multipartFiles, String dnsUrl);
+
+    void downloadLocalServerFile(String uid, String fileName, HttpServletResponse response);
 
     void editAndSave(SysFileEntity file);
 

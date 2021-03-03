@@ -4,3 +4,6 @@ spring:
     url: jdbc:mysql://47.117.127.63:3306/ocr?characterEncoding=utf8&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: ocr
     password: Ocr@123456
+
+dns:
+  url: https://www.performercn.com

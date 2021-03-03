@@ -13,4 +13,7 @@ public class BaseController {
 
     @Value("${pdf.url}")
     protected String pdfApiUrl;
+
+    @Value("${dns.url}")
+    protected String dnsUrl;
 }
