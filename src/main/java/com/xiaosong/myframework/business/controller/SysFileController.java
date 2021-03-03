@@ -29,8 +29,13 @@ import java.util.UUID;
 @Log4j2
 public class SysFileController {
 
+    // 设置固定的日期格式
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
     @Autowired
     SysFileService sysFileService;
+
+
 
     /**
      * 上传单个文件
