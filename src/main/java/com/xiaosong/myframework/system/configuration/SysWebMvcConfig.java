@@ -40,8 +40,8 @@ public class SysWebMvcConfig implements WebMvcConfigurer {
         }
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/");
-        registry.addResourceHandler("/public/")
-                .addResourceLocations("file:" + fileRootPath);
+        registry.addResourceHandler("/public/**")
+                .addResourceLocations("classpath:" + "/public/");
 
     }
 
