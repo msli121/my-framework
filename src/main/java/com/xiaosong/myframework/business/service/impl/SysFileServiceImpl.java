@@ -10,8 +10,11 @@ import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +29,28 @@ public class SysFileServiceImpl extends BaseService implements SysFileService {
 
     @Autowired
     public SysFileDao sysFileDao;
+
+    @Override
+    public String uploadSingeFileToLocalServer(String uid, MultipartFile multipartFile) {
+        UserEntity userInDb = userDao.findByUid(uid);
+        if(null == userInDb) {
+            throw new BusinessException("003", "用户不存在，请重新登录");
+        }
+        String os = System.getProperty("os.name");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String fileRootDir = "";
+        if(os.toLowerCase().startsWith("win")) {
+            fileRootDir = "D:/ocr/user-file/" + uid + "/";
+        } else {
+            fileRootDir = "/home/msli/wwwapps/ocr/user-file/" + uid + "/";
+        }
+        // 校验文件夹是否存在
+        File folder = new File(fileRootDir);
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        return null;
+    }
 
     @Override
     public void editAndSave(SysFileEntity file) {

@@ -30,8 +30,15 @@ public class SysWebMvcConfig implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**")
-                .addResourceLocations("classpath:/static/");
+        String os = System.getProperty("os.name");
+        String fileRootPath = "";
+        if(os.toLowerCase().startsWith("win")) {
+            fileRootPath = "D:/ocr/user-file/";
+        } else {
+            fileRootPath = "/home/msli/wwwapps/ocr/user-file/";
+        }
+        registry.addResourceHandler("/api/file/**")
+                .addResourceLocations("file:" + fileRootPath);
     }
 
     /**

@@ -35,10 +35,18 @@ public class SysFileController {
     @Autowired
     SysFileService sysFileService;
 
+    /**
+     * 上传单个文件到服务器，保存在服务器本地
+     */
+    @PostMapping("/upload")
+    public ApiResult uploadFileToLoaclServer(@RequestParam(value="uid") String uid, @RequestParam("file") MultipartFile file) {
+        return ApiResult.T();
+    }
+
 
 
     /**
-     * 上传单个文件
+     * 上传单个文件到数据库，以 base64 形式保存
      * @param file
      * @return
      */
