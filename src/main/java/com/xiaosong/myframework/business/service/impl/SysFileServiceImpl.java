@@ -43,9 +43,9 @@ public class SysFileServiceImpl extends BaseService implements SysFileService {
         String os = System.getProperty("os.name");
         String fileRootDir = "";
         if(os.toLowerCase().startsWith("win")) {
-            fileRootDir = "D:"+ File.separator+"ocr-file"+File.separator+"public"+File.separator + uid + File.separator;
+            fileRootDir = "D:"+ File.separator+"ocr-file"+File.separator+"user"+File.separator + uid + File.separator;
         } else {
-            fileRootDir = "/home/msli/wwwapps/ocr-file/public/" + uid + "/";
+            fileRootDir = "/home/msli/wwwapps/ocr-file/user/" + uid + "/";
         }
         // 校验文件夹是否存在
         File folder = new File(fileRootDir);
