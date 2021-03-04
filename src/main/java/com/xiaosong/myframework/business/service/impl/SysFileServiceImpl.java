@@ -40,12 +40,19 @@ public class SysFileServiceImpl extends BaseService implements SysFileService {
         if(null == userInDb) {
             throw new BusinessException("003", "用户不存在，请重新登录");
         }
+        String principal = SecurityUtils.getSubject().getPrincipal().toString();
+        if(null == principal) {
+            throw new BusinessException("001", "获取用户登录凭证失败，请重新登录");
+        }
+        if(!uid.equals(principal)) {
+            throw new BusinessException("001", "登录异常，请重新登录");
+        }
         String os = System.getProperty("os.name");
-        String fileRootDir = "";
+        String fileRootDir;
         if(os.toLowerCase().startsWith("win")) {
-            fileRootDir = "D:"+ File.separator+"ocr-file"+File.separator+"public"+File.separator + uid + File.separator;
+            fileRootDir = "D:"+ File.separator+"ocr-file"+File.separator+"user"+File.separator + uid + File.separator;
         } else {
-            fileRootDir = "/home/msli/wwwapps/ocr-file/public/" + uid + "/";
+            fileRootDir = "/home/msli/wwwapps/ocr-file/user/" + uid + "/";
         }
         // 校验文件夹是否存在
         File folder = new File(fileRootDir);
@@ -53,6 +60,7 @@ public class SysFileServiceImpl extends BaseService implements SysFileService {
             folder.mkdirs();
         }
         List<String> fileUrlList = new ArrayList<>();
+        List<SysFileEntity> sysFileEntityList = new ArrayList<>();
         if(multipartFile != null && multipartFile.length > 0) {
             for (int i = 0; i < multipartFile.length; i++) {
                 try {
@@ -122,10 +130,12 @@ public class SysFileServiceImpl extends BaseService implements SysFileService {
             throw new BusinessException("001", "下载失败，服务开小差了");
         } finally {
             try {
-                if(bis != null)
+                if(bis != null) {
                     bis.close();
-                if(outputStream != null)
+                }
+                if(outputStream != null) {
                     outputStream.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
