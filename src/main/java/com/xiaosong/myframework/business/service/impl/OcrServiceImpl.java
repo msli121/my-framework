@@ -41,7 +41,12 @@ public class OcrServiceImpl extends BaseService implements OcrService {
         String base64 = fileEntity.getFileContent().split(",")[1];
         images.add(base64);
         requestBody.put("images", images);
-        String ocrResult = SysHttpUtils.getInstance().sendJsonPost(ocrApiUrl, JSON.toJSONString(requestBody));
+        String ocrResult = "";
+        try {
+            ocrResult = SysHttpUtils.getInstance().sendJsonPost(ocrApiUrl, JSON.toJSONString(requestBody));
+        } catch (Exception e) {
+            throw new BusinessException("001", "连接失败，请稍后再试");
+        }
         JSONObject result = JSON.parseObject(ocrResult);
         return result.getJSONArray("results").get(0);
     }
