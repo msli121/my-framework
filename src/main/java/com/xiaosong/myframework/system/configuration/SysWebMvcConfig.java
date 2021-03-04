@@ -38,11 +38,14 @@ public class SysWebMvcConfig implements WebMvcConfigurer {
         } else {
             fileRootPath = "/home/msli/wwwapps/ocr-file/public/";
         }
+        File fileDir = new File(fileRootPath);
+        if(!fileDir.isDirectory()) {
+            fileDir.mkdirs();
+        }
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/");
-        registry.addResourceHandler("/public/")
+        registry.addResourceHandler("/public/**")
                 .addResourceLocations("file:" + fileRootPath);
-
     }
 
     /**
