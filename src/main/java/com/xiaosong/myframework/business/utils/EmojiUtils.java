@@ -9,11 +9,8 @@ import static java.util.regex.Pattern.*;
 
 public class EmojiUtils {
     public static void main(String[] args) {
-        String  testStr = "李明松！31msli";
-        Boolean has = hasEmoji(testStr);
-        System.out.println(has);
-        System.out.println(checkUsername(testStr));
-        System.out.println(replaceEmoji(testStr, "^_^"));
+        String  testStr = "GOSU1111111";
+        System.out.println(checkBookingNum(testStr));
     }
 
     /**
@@ -52,5 +49,10 @@ public class EmojiUtils {
     public static boolean checkUsername(String username) {
         String regExp = "^[\\u4e00-\\u9fa5\\w-&]{0,19}$";
         return username.matches(regExp);
+    }
+
+    public static boolean checkBookingNum(String num) {
+        String regExp = "^[(ZIMU)(GOSU)(SSPH)(LNLU)].*\\d{7}$";
+        return num.matches(regExp);
     }
 }

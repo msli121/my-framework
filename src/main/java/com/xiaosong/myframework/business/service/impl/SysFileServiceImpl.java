@@ -1,13 +1,28 @@
 package com.xiaosong.myframework.business.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.xiaosong.myframework.business.entity.SysFileEntity;
 import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.exception.BusinessException;
 import com.xiaosong.myframework.business.repository.SysFileDao;
 import com.xiaosong.myframework.business.service.SysFileService;
 import com.xiaosong.myframework.business.service.base.BaseService;
+import com.xiaosong.myframework.business.utils.Base64Util;
 import com.xiaosong.myframework.business.utils.FileUtil;
+import com.xiaosong.myframework.business.utils.PdfOperationUtil;
 import com.xiaosong.myframework.business.utils.SysRandomUtil;
+import com.xiaosong.myframework.system.utils.SysHttpUtils;
+import org.apache.pdfbox.cos.COSName;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDResources;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.pdfbox.rendering.ImageType;
+import org.apache.pdfbox.rendering.PDFRenderer;
+import org.apache.pdfbox.text.PDFTextStripper;
+import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,12 +30,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriter;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static com.xiaosong.myframework.business.utils.EmojiUtils.checkBookingNum;
 
 /**
  * @Description
@@ -82,6 +100,60 @@ public class SysFileServiceImpl extends BaseService implements SysFileService {
             }
         }
         return fileUrlList;
+    }
+
+    @Override
+    public void classifyPdfDocument(MultipartFile file, HttpServletResponse response, String ocrApiUrl) throws IOException {
+        if (file.isEmpty()) {
+            throw new BusinessException("003", "出错啦，文件不存在");
+        }
+        String originalFileName = file.getOriginalFilename();
+        if (StringUtils.isEmpty(originalFileName) || !originalFileName.endsWith(".pdf")) {
+            throw new BusinessException("003", "请上传PDF类型的文件");
+        }
+        HashMap<String, List<Integer>> classifiedFilesMap = new HashMap<>();
+        PDDocument pdfDoc = PdfOperationUtil.load(file.getInputStream());
+        for(int i=0; i <= pdfDoc.getNumberOfPages(); i++ ) {
+            // 构造图片
+            PDFRenderer pdfRenderer = new PDFRenderer(pdfDoc);
+            BufferedImage buffImage = pdfRenderer.renderImage(i);
+            // 写入文件中
+            File tempFile = File.createTempFile("temp", "png");
+            ImageIO.write(buffImage, "png", tempFile);
+            // base64 编码
+            String pageBase64Str = Base64Util.fileToBase64Str(tempFile);
+            // 删除 \r\n
+            pageBase64Str = pageBase64Str.replaceAll("[\n\r]", "");
+            // 构造请求体
+            HashMap<String, Object> requestBody = new HashMap<>();
+            ArrayList<String> images = new ArrayList<>();
+            images.add(pageBase64Str);
+            requestBody.put("images", images);
+            String ocrResult = SysHttpUtils.getInstance().sendJsonPost(ocrApiUrl, JSON.toJSONString(requestBody));;
+            JSONObject result = JSON.parseObject(ocrResult);
+            // 返回解析
+            parseResult(ocrResult, classifiedFilesMap, i);
+        }
+    }
+
+    private void parseResult(String ocrResult, HashMap<String, List<Integer>> classifiedFilesMap, int pageIndex) {
+        JSONArray resultJsonArray = (JSONArray)JSON.parseObject(ocrResult).getJSONArray("results").get(0);
+        if(resultJsonArray != null && resultJsonArray.size() > 1) {
+            for(int i=0; i< resultJsonArray.size(); i++) {
+                JSONObject item = resultJsonArray.getJSONObject(i);
+                String text = item.getString("text");
+                if(checkBookingNum(text)) {
+                    if(classifiedFilesMap.containsKey(text)) {
+                        classifiedFilesMap.get(text).add(i);
+                    } else {
+                        List<Integer> pages = new ArrayList<>();
+                        pages.add(pageIndex);
+                        classifiedFilesMap.put(text, pages);
+                    }
+                    break;
+                }
+            }
+        }
     }
 
     @Override

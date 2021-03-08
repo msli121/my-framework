@@ -27,6 +27,18 @@ public class SysFileController extends BaseController {
     SysFileService sysFileService;
 
     /**
+     * pdf 文件单证分类
+     * @param file
+     * @param response
+     * @return 以附件压缩包形式返回分类后的 pdf 文件
+     */
+    @PostMapping("/classify-pdf")
+    public ApiResult classifyPdfDocument(@RequestParam("file") MultipartFile file, HttpServletResponse response) throws IOException {
+        sysFileService.classifyPdfDocument(file, response, ocrApiUrl);
+        return ApiResult.T("分类成功");
+    }
+
+    /**
      * 上传文件到服务器，保存在服务器本地
      */
     @PostMapping("/upload")

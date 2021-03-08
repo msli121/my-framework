@@ -18,7 +18,10 @@ import java.util.Map;
 
 public interface SysFileService {
 
+
     List<String> uploadFileToLocalServer(String uid, MultipartFile[] multipartFiles, String dnsUrl);
+
+    void classifyPdfDocument(MultipartFile file, HttpServletResponse response, String ocrApiUrl) throws IOException;
 
     void downloadLocalServerFile(String uid, String fileName, HttpServletResponse response);
 

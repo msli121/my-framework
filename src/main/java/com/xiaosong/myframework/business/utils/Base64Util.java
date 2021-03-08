@@ -17,7 +17,7 @@ public class Base64Util {
     private static final Base64.Encoder ENCODER_64 = Base64.getEncoder();
 
     // dpi越大转换后的图片越清晰，相对转换速度越慢
-    private static final Integer DPI = 200;
+    private static final Integer DPI = 100;
 
     // 编码、解码格式
     private static final String CODE_FORMATE = "UTF-8";
@@ -200,7 +200,7 @@ public class Base64Util {
                 // Base64编码
                 jpg_base64 = ENCODER_64.encodeToString(jpg_Bytes).trim();
                 // 删除 \r\n
-                jpg_base64 = jpg_base64.replaceAll("\n|\n", "");
+                jpg_base64 = jpg_base64.replaceAll("[\n\r]", "");
             }
         } catch (IOException e) {
             e.getMessage();
