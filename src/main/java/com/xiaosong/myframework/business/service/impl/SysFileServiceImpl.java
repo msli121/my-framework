@@ -10,18 +10,11 @@ import com.xiaosong.myframework.business.repository.SysFileDao;
 import com.xiaosong.myframework.business.service.SysFileService;
 import com.xiaosong.myframework.business.service.base.BaseService;
 import com.xiaosong.myframework.business.utils.Base64Util;
-import com.xiaosong.myframework.business.utils.FileUtil;
 import com.xiaosong.myframework.business.utils.PdfOperationUtil;
 import com.xiaosong.myframework.business.utils.SysRandomUtil;
 import com.xiaosong.myframework.system.utils.SysHttpUtils;
-import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDResources;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
-import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.tools.imageio.ImageIOUtil;
 import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +24,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
 import javax.imageio.ImageIO;
-import javax.imageio.ImageWriter;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import static com.xiaosong.myframework.business.utils.EmojiUtils.checkBookingNum;
 
@@ -117,6 +110,9 @@ public class SysFileServiceImpl extends BaseService implements SysFileService {
             // 构造图片
             PDFRenderer pdfRenderer = new PDFRenderer(pdfDoc);
             BufferedImage buffImage = pdfRenderer.renderImage(i);
+            // 写入本地
+            String fileRootDir = "D:"+ File.separator+"ocr-file"+File.separator+"user"+File.separator + "self" + File.separator;
+            ImageIOUtil.writeImage(buffImage, fileRootDir+"test.jpg", 130);
             // 写入文件中
             File tempFile = File.createTempFile("temp", "png");
             ImageIO.write(buffImage, "png", tempFile);
@@ -130,14 +126,16 @@ public class SysFileServiceImpl extends BaseService implements SysFileService {
             images.add(pageBase64Str);
             requestBody.put("images", images);
             String ocrResult = SysHttpUtils.getInstance().sendJsonPost(ocrApiUrl, JSON.toJSONString(requestBody));;
-            JSONObject result = JSON.parseObject(ocrResult);
+//            JSONObject result = JSON.parseObject(ocrResult);
             // 返回解析
             parseResult(ocrResult, classifiedFilesMap, i);
+            tempFile.delete();
         }
     }
 
     private void parseResult(String ocrResult, HashMap<String, List<Integer>> classifiedFilesMap, int pageIndex) {
         JSONArray resultJsonArray = (JSONArray)JSON.parseObject(ocrResult).getJSONArray("results").get(0);
+        boolean bookingNumExisted = false;
         if(resultJsonArray != null && resultJsonArray.size() > 1) {
             for(int i=0; i< resultJsonArray.size(); i++) {
                 JSONObject item = resultJsonArray.getJSONObject(i);
@@ -150,9 +148,13 @@ public class SysFileServiceImpl extends BaseService implements SysFileService {
                         pages.add(pageIndex);
                         classifiedFilesMap.put(text, pages);
                     }
+                    bookingNumExisted = true;
                     break;
                 }
             }
+        }
+        if(!bookingNumExisted) {
+            throw new BusinessException("003", "未识别出有效的提单号");
         }
     }
 
