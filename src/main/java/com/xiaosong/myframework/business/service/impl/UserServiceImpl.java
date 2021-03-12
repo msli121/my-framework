@@ -205,7 +205,7 @@ public class UserServiceImpl extends BaseService implements UserService {
         if(null == principal) {
             throw new BusinessException("001", "获取用户登录凭证失败，请重新登录");
         }
-        if(!uid.equals(principal)) {
+        if(!principal.equals(uid)) {
             throw new BusinessException("001", "登录异常，请重新登录");
         }
         UserEntity userInDb = userDao.findByUid(uid);

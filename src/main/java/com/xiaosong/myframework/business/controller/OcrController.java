@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 
 /**
@@ -33,19 +34,18 @@ public class OcrController  extends BaseController {
     @Autowired
     OcrService ocrService;
 
-    @PostMapping("/upload-single")
-    public ApiResult uploadSingleImageToRecognize(@RequestParam(value="uid") String uid,@RequestParam("file") MultipartFile file) {
-        userService.simpleCheckUserIsAuth(uid);
-        return ApiResult.T();
+    @PostMapping("/upload-single/file")
+    public ApiResult uploadSingleMultipartFileToRecognize(@RequestParam(value="uid") String uid,@RequestParam("file") MultipartFile file) throws IOException {
+//        userService.simpleCheckUserIsAuth(uid);
+        SysFileEntity sysFileEntity = ocrService.RecognizeSingleImageAndSave(ocrApiUrl, uid, file);
+        return ApiResult.T(sysFileEntity);
     }
 
-    @PostMapping("/single-upload")
+    @PostMapping("/upload-single/base64")
     public ApiResult uploadSinglePicture(@RequestBody SysFileEntity file) {
-        file.setUploadTime(new Timestamp(System.currentTimeMillis()));
-        Object recognitionResult = ocrService.getOcrRecognitionResult(ocrApiUrl, file);
-        file.setRecognitionContent(JSON.toJSONString(recognitionResult));
-        sysFileService.save(file);
-        return ApiResult.T(file);
+//        userService.simpleCheckUserIsAuth(file.getUid());
+        SysFileEntity recognitionResult = ocrService.getOcrRecognitionResult(ocrApiUrl, file);
+        return ApiResult.T(recognitionResult);
     }
 
     @PostMapping("/edit-save")
