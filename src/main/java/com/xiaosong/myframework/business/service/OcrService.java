@@ -1,6 +1,7 @@
 package com.xiaosong.myframework.business.service;
 
 import com.xiaosong.myframework.business.entity.SysFileEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @Description
@@ -8,7 +9,8 @@ import com.xiaosong.myframework.business.entity.SysFileEntity;
  * @Date 2021/01/26
  */
 public interface OcrService {
-    String getOcrRecognitionResult(String url, String jsonData);
+    SysFileEntity uploadSingleImageToRecognize(String uid, MultipartFile file);
 
     Object getOcrRecognitionResult(String ocrApiUrl, SysFileEntity fileEntity);
+
 }

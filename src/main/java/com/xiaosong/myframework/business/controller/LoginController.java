@@ -3,20 +3,15 @@ package com.xiaosong.myframework.business.controller;
 import com.xiaosong.myframework.business.constant.BusinessConstant;
 import com.xiaosong.myframework.business.dto.ApiResult;
 import com.xiaosong.myframework.business.dto.WeChatLoginDtoEntity;
-import com.xiaosong.myframework.business.entity.RoleEntity;
 import com.xiaosong.myframework.business.entity.UserEntity;
 import com.xiaosong.myframework.business.response.UserProfileEntity;
 import com.xiaosong.myframework.business.service.LoginService;
-import com.xiaosong.myframework.business.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.HtmlUtils;
 
 import java.io.UnsupportedEncodingException;
 
@@ -29,9 +24,6 @@ import java.io.UnsupportedEncodingException;
 @RequestMapping("/api")
 @Log4j2
 public class LoginController {
-
-    @Autowired
-    UserService userService;
 
     @Autowired
     LoginService loginService;

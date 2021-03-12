@@ -200,6 +200,21 @@ public class UserServiceImpl extends BaseService implements UserService {
     }
 
     @Override
+    public void simpleCheckUserIsAuth(String uid) {
+        String principal = SecurityUtils.getSubject().getPrincipal().toString();
+        if(null == principal) {
+            throw new BusinessException("001", "获取用户登录凭证失败，请重新登录");
+        }
+        if(!uid.equals(principal)) {
+            throw new BusinessException("001", "登录异常，请重新登录");
+        }
+        UserEntity userInDb = userDao.findByUid(uid);
+        if(null == userInDb) {
+            throw new BusinessException("003", "用户不存在，请重新登录");
+        }
+    }
+
+    @Override
     public void initNewUser(String password, UserEntity user) {
         // 生成新用户 UID
         user.setUid(generateUid());

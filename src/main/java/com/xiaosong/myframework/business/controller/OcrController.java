@@ -6,12 +6,11 @@ import com.xiaosong.myframework.business.dto.ApiResult;
 import com.xiaosong.myframework.business.entity.SysFileEntity;
 import com.xiaosong.myframework.business.service.OcrService;
 import com.xiaosong.myframework.business.service.SysFileService;
+import com.xiaosong.myframework.business.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 
@@ -29,12 +28,20 @@ public class OcrController  extends BaseController {
     SysFileService sysFileService;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     OcrService ocrService;
+
+    @PostMapping("/upload-single")
+    public ApiResult uploadSingleImageToRecognize(@RequestParam(value="uid") String uid,@RequestParam("file") MultipartFile file) {
+        userService.simpleCheckUserIsAuth(uid);
+        return ApiResult.T();
+    }
 
     @PostMapping("/single-upload")
     public ApiResult uploadSinglePicture(@RequestBody SysFileEntity file) {
         file.setUploadTime(new Timestamp(System.currentTimeMillis()));
-        sysFileService.save(file);
         Object recognitionResult = ocrService.getOcrRecognitionResult(ocrApiUrl, file);
         file.setRecognitionContent(JSON.toJSONString(recognitionResult));
         sysFileService.save(file);

@@ -10,7 +10,9 @@ import com.xiaosong.myframework.system.utils.SysHttpUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -23,9 +25,13 @@ import java.util.HashMap;
 @Transactional(rollbackFor = Exception.class)
 public class OcrServiceImpl extends BaseService implements OcrService {
 
+
     @Override
-    public String getOcrRecognitionResult(String url, String jsonData) {
-        return SysHttpUtils.getInstance().sendJsonPost(url, jsonData);
+    public SysFileEntity uploadSingleImageToRecognize(String uid, MultipartFile file) {
+
+        SysFileEntity uploadFile = new SysFileEntity();
+        uploadFile.setUploadTime(new Timestamp(System.currentTimeMillis()));
+        return null;
     }
 
     @Override
