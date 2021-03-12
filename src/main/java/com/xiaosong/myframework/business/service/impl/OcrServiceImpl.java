@@ -113,7 +113,7 @@ public class OcrServiceImpl extends BaseService implements OcrService {
             fileRootDir = "D:"+ File.separator+"ocr-file"+File.separator+"user"+File.separator + uid + File.separator;
             filePath = fileRootDir;
         } else {
-            fileRootDir = "/home/msli/wwwapps/ocr-file/user/";
+            fileRootDir = "/home/msli/wwwapps/ocr-file/user/"+ uid + "/";
             filePath = "https://www.performercn.com/download/" + uid + "/";
         }
         // 校验文件夹是否存在
@@ -155,7 +155,7 @@ public class OcrServiceImpl extends BaseService implements OcrService {
                     + "user" + File.separator + file.getUid() + File.separator;
             filePath = fileRootDir;
         } else {
-            fileRootDir = "/home/msli/wwwapps/ocr-file/user/";
+            fileRootDir = "/home/msli/wwwapps/ocr-file/user/" + file.getUid() + "/";
             filePath = "https://www.performercn.com/download/" + file.getUid() + "/";
         }
         String fileName = file.getFileName();
