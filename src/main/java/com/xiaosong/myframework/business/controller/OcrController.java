@@ -36,14 +36,14 @@ public class OcrController  extends BaseController {
 
     @PostMapping("/upload-single/file")
     public ApiResult uploadSingleMultipartFileToRecognize(@RequestParam(value="uid") String uid,@RequestParam("file") MultipartFile file) throws IOException {
-//        userService.simpleCheckUserIsAuth(uid);
+        userService.simpleCheckUserIsAuth(uid);
         SysFileEntity sysFileEntity = ocrService.RecognizeSingleImageAndSave(ocrApiUrl, uid, file);
         return ApiResult.T(sysFileEntity);
     }
 
     @PostMapping("/upload-single/base64")
     public ApiResult uploadSinglePicture(@RequestBody SysFileEntity file) {
-//        userService.simpleCheckUserIsAuth(file.getUid());
+        userService.simpleCheckUserIsAuth(file.getUid());
         SysFileEntity recognitionResult = ocrService.getOcrRecognitionResult(ocrApiUrl, file);
         return ApiResult.T(recognitionResult);
     }
