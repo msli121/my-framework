@@ -261,6 +261,16 @@ public class SysFileServiceImpl extends BaseService implements SysFileService {
         if(null == fileId ) {
             throw new BusinessException("004", "参数异常，缺少文件ID");
         }
+        SysFileEntity fileEntity = sysFileDao.findById(fileId).get();
+        if(fileEntity.getFileContent().startsWith("https://www.performercn.com")) {
+            String[] arr = fileEntity.getFileContent().split("/");
+            String filePath = "/home/msli/wwwapps/ocr-file/user/"
+                    + arr[arr.length - 2] + "/" + arr[arr.length - 1];
+            File fileInServer = new File(filePath);
+            if(fileInServer.exists()){
+                fileInServer.delete();
+            }
+        }
         sysFileDao.deleteById(fileId);
     }
 

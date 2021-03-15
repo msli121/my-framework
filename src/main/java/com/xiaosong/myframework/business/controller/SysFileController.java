@@ -100,6 +100,11 @@ public class SysFileController extends BaseController {
         return ApiResult.T();
     }
 
+    /**
+     * 删除指定文件
+     * @param fileId
+     * @return
+     */
     @GetMapping("/delete/{fileId}")
     public ApiResult deleteFile(@PathVariable Integer fileId) {
         sysFileService.deleteFile(fileId);
