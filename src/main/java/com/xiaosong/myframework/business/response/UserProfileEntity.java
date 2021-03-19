@@ -51,4 +51,9 @@ public class UserProfileEntity implements Serializable {
         this.unionId = user.getUnionId();
         this.headImgUrl = user.getHeadImgUrl();
     }
+
+    public static void main(String[] args) {
+        String name = new String( Base64.decodeBase64("8J+QgiBE"));
+        System.out.println(name);
+    }
 }
