@@ -6,13 +6,13 @@ import com.xiaosong.myframework.business.dto.ApiResult;
 import com.xiaosong.myframework.business.entity.SysFileEntity;
 import com.xiaosong.myframework.business.service.OcrService;
 import com.xiaosong.myframework.business.service.SysFileService;
+import com.xiaosong.myframework.business.service.UserService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 
 /**
@@ -29,16 +29,23 @@ public class OcrController  extends BaseController {
     SysFileService sysFileService;
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     OcrService ocrService;
 
-    @PostMapping("/single-upload")
+    @PostMapping("/upload-single/file")
+    public ApiResult uploadSingleMultipartFileToRecognize(@RequestParam(value="uid") String uid,@RequestParam("file") MultipartFile file) throws IOException {
+        userService.simpleCheckUserIsAuth(uid);
+        SysFileEntity sysFileEntity = ocrService.RecognizeSingleImageAndSave(ocrApiUrl, uid, file);
+        return ApiResult.T(sysFileEntity);
+    }
+
+    @PostMapping("/upload-single/base64")
     public ApiResult uploadSinglePicture(@RequestBody SysFileEntity file) {
-        file.setUploadTime(new Timestamp(System.currentTimeMillis()));
-        sysFileService.save(file);
-        Object recognitionResult = ocrService.getOcrRecognitionResult(ocrApiUrl, file);
-        file.setRecognitionContent(JSON.toJSONString(recognitionResult));
-        sysFileService.save(file);
-        return ApiResult.T(file);
+        userService.simpleCheckUserIsAuth(file.getUid());
+        SysFileEntity recognitionResult = ocrService.getOcrRecognitionResult(ocrApiUrl, file);
+        return ApiResult.T(recognitionResult);
     }
 
     @PostMapping("/edit-save")

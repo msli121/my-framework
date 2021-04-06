@@ -26,4 +26,7 @@ public class BaseService {
     @Autowired
     protected RolePermissionDao rolePermissionDao;
 
+    @Autowired
+    protected SysFileDao sysFileDao;
+
 }

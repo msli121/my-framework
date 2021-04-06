@@ -11,6 +11,8 @@ public interface UserService {
 
     String generateUid();
 
+    void simpleCheckUserIsAuth(String uid);
+
     void initNewUser(String password, UserEntity user);
 
     void editUser(UserDtoEntity user);

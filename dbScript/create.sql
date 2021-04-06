@@ -197,7 +197,7 @@ create table `t_sys_file` (
     `id` int(11) not null auto_increment primary key,
     `uid` varchar(255) not null comment '用户uid',
     `file_name` varchar(255) not null comment '文件名',
-    `file_type` varchar(255) not null comment '文件类型',
+    `file_type` varchar(255) null comment '文件类型',
     `file_size` int comment '文件大小，单位b',
     `file_content` MEDIUMTEXT  comment '文件内容',
     `recognition_content` MEDIUMTEXT  comment '文件识别内容',

@@ -32,11 +32,11 @@ public class SysWebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String os = System.getProperty("os.name");
-        String fileRootPath = "";
+        String fileRootPath;
         if(os.toLowerCase().startsWith("win")) {
-            fileRootPath = "D:"+ File.separator+"ocr-file"+File.separator+"public"+File.separator;
+            fileRootPath = "D:"+ File.separator+"ocr-file"+File.separator+"user"+File.separator;
         } else {
-            fileRootPath = "/home/msli/wwwapps/ocr-file/public/";
+            fileRootPath = "/home/msli/wwwapps/ocr-file/user/";
         }
         File fileDir = new File(fileRootPath);
         if(!fileDir.isDirectory()) {
@@ -45,6 +45,8 @@ public class SysWebMvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/static/**")
                 .addResourceLocations("classpath:/static/");
         registry.addResourceHandler("/public/**")
+                .addResourceLocations("classpath:/public/");
+        registry.addResourceHandler("/download/**")
                 .addResourceLocations("file:" + fileRootPath);
     }
 
