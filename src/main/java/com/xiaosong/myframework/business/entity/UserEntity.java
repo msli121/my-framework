@@ -1,7 +1,10 @@
 package com.xiaosong.myframework.business.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 /**
@@ -19,6 +22,7 @@ public class UserEntity implements Serializable {
     private int id;
     private String uid;
     private String username;
+    private Timestamp registryTime;
     private Boolean hasEmoji = false;
     private String password;
     private String avatar;
@@ -38,6 +42,7 @@ public class UserEntity implements Serializable {
     private String headImgUrl;
     private String enabled = "1";
     private String locked = "0";
+    private Timestamp loginTime;
 
     @Id
     @Column(name = "id")
@@ -68,6 +73,17 @@ public class UserEntity implements Serializable {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Basic
+    @Column(name = "registry_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    public Timestamp getRegistryTime() {
+        return registryTime;
+    }
+
+    public void setRegistryTime(Timestamp registryTime) {
+        this.registryTime = registryTime;
     }
 
     @Basic
@@ -258,6 +274,17 @@ public class UserEntity implements Serializable {
 
     public void setLocked(String locked) {
         this.locked = locked;
+    }
+
+    @Basic
+    @Column(name = "login_time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    public Timestamp getLoginTime() {
+        return loginTime;
+    }
+
+    public void setLoginTime(Timestamp loginTime) {
+        this.loginTime = loginTime;
     }
 
     @Override
