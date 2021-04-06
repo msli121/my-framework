@@ -31,5 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-/hs_err_pid23504.log
-/logs/
