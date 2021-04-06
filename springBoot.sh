@@ -52,7 +52,7 @@ case "$1" in
       echo -e "\033[32m $APP_NAME already running \033[0m"
       exit 1
     fi
-   nohup java -jar $JAR_NAME > output 2>&1 &
+   nohup java -jar $JAR_NAME --spring.profiles.active=prod  > output 2>&1 &
    echo -ne "\033[32m Starting \033[0m"
     for i in {1..20}; do
         echo -ne "\033[32m.\033[0m"
