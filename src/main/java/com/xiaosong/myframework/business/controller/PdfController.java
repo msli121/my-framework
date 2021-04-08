@@ -41,6 +41,11 @@ public class PdfController extends BaseController {
         return ApiResult.T(pdfService.recognisePdfFivePage(file, uid, pdfApiUrl));
     }
 
+    @PostMapping("/upload-single/base64")
+    public ApiResult recogniseBase64Pdf(@RequestBody SysFileEntity file){
+        return ApiResult.T(pdfService.recogniseBase64Pdf(file, pdfApiUrl));
+    }
+
     /**
      * 识别上传的PDF文件的前5页 url  需要登录
      * @param map

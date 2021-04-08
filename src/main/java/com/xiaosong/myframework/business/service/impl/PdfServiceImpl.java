@@ -62,6 +62,25 @@ public class PdfServiceImpl extends BaseService implements PdfService {
         return results;
     }
 
+    @Override
+    public HashMap<String, Object> recogniseBase64Pdf(SysFileEntity file, String pdfApiUrl) {
+        // 构造请求体
+        HashMap<String, Object> requestBody = new HashMap<>();
+        String pageBase64Str;
+        if(file.getFileContent().contains("base64")) {
+            pageBase64Str = file.getFileContent().split(",")[1];
+        } else {
+            pageBase64Str = file.getFileContent();
+        }
+        requestBody.put("basestr", pageBase64Str);
+        String ocrResult = SysHttpUtils.getInstance().sendJsonPost(pdfApiUrl, JSON.toJSONString(requestBody));
+        JSONObject pageResult = (JSONObject) ((JSONArray) JSON.parse(JSON.parse(ocrResult).toString())).get(0);
+        HashMap<String, Object> resultMap = new HashMap<>();
+        resultMap.put("data", pageResult.get("data"));
+        resultMap.put("shape", pageResult.get("shape"));
+        return resultMap;
+    }
+
     /**
      * 获取 pdf 文件前 5 页识别结果, url pdf
      *

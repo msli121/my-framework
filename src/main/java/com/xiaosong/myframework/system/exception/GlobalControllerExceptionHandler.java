@@ -38,7 +38,9 @@ public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     public ApiResult globalDefaultExceptionHandler(Exception e) {
-        String message = null;
+        String message = e.getMessage();
+        log.info("============全局异常捕获");
+        log.info(e);
 
         if (e instanceof IllegalArgumentException) {
             message = "参数错误";
