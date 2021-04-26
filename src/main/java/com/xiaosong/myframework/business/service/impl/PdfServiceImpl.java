@@ -10,6 +10,7 @@ import com.xiaosong.myframework.business.service.base.BaseService;
 import com.xiaosong.myframework.business.utils.Base64Util;
 import com.xiaosong.myframework.business.utils.PdfOperationUtil;
 import com.xiaosong.myframework.system.utils.SysHttpUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.net.ssl.*;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,6 +28,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,8 +43,44 @@ import java.util.Map;
  * @Date 2021/02/28
  */
 @Service("pdfService")
+@Slf4j
 @Transactional(rollbackFor = Exception.class)
 public class PdfServiceImpl extends BaseService implements PdfService {
+
+    /**
+     * X509Trust
+     */
+    static class MyX509TrustManager implements X509TrustManager {
+
+        @Override
+        public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+
+        }
+
+        @Override
+        public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
+
+        }
+
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return null;
+        }
+
+        /***
+         * 校验https网址是否安全
+         *
+         * @author solexit06
+         *
+         */
+        public class TrustAnyHostnameVerifier implements HostnameVerifier {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                // 直接返回true:默认所有https请求都是安全的
+                return true;
+            }
+        }
+    }
 
     /**
      * 获取 pdf 文件前 5 页识别结果
@@ -162,16 +204,39 @@ public class PdfServiceImpl extends BaseService implements PdfService {
         int startPage = 1;
         // 内存中存储的PDF Document
         PDDocument pdDocument = null;
-        //输入流
+        // 输入流
         InputStream inputStream = null;
+        // 日志
+        log.info("pdf 文件 url [{}]", pdfUrl);
         try {
-            // 当作一个URL来装载文件
-            URL url = new URL(pdfUrl);
-            URLConnection con = url.openConnection();
-            con.setConnectTimeout(3 * 1000);
-            inputStream = con.getInputStream();
+            if(pdfUrl.startsWith("https:")) {
+                // 创建SSLContext
+                SSLContext sslContext = SSLContext.getInstance("SSL");
+                TrustManager[] tm = { new MyX509TrustManager() };
+                // 初始化
+                sslContext.init(null, tm, new java.security.SecureRandom());
+                // 获取SSLSocketFactory对象
+                SSLSocketFactory ssf = sslContext.getSocketFactory();
+                // url对象
+                URL url = new URL(pdfUrl);
+                // 打开连接
+                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+                conn.setHostnameVerifier(new MyX509TrustManager().new TrustAnyHostnameVerifier());
+                // 设置当前实例使用的SSLSoctetFactory
+                conn.setSSLSocketFactory(ssf);
+                conn.connect();
+                // 得到输入流
+                inputStream = conn.getInputStream();
+            } else {
+                // 当作一个 https 来获取文件
+                URL url = new URL(pdfUrl);
+                URLConnection con = url.openConnection();
+                con.setConnectTimeout(6 * 1000);
+                inputStream = con.getInputStream();
+            }
             pdDocument = PDDocument.load(inputStream);
-        } catch (MalformedURLException e) {
+            log.info("获取 pdf 文件成功");
+        } catch (MalformedURLException | NoSuchAlgorithmException | KeyManagementException e) {
             throw new BusinessException("001", "无效url获取pdf文件失败");
         } finally {
             if (inputStream != null) {
@@ -185,4 +250,6 @@ public class PdfServiceImpl extends BaseService implements PdfService {
         }
         return pdDocument;
     }
+
+
 }

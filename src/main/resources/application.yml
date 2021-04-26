@@ -39,7 +39,8 @@ spring:
 
 ocr:
 #  url: http://47.117.127.63:8868/predict/ocr_system
-  url: http://47.117.127.63:8868/predict/ocr_v50
+#  url: http://47.117.127.63:8868/predict/ocr_v50
+  url: http://101.132.24.161:80/predict/ocr_v50
   appId: wx32e95d3c6fbe4913
   appSecret: e46c212fb7e9fd121dedfab4c0942d21
 pdf:
