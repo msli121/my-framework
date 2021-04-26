@@ -197,7 +197,7 @@ public class PdfServiceImpl extends BaseService implements PdfService {
      * @return
      * @throws Exception
      */
-    public PDDocument readPdfFromUrl(String pdfUrl) throws IOException {
+    public static PDDocument readPdfFromUrl(String pdfUrl) throws IOException {
         // 是否排序
         boolean sort = false;
         // 开始提取页数
@@ -210,21 +210,27 @@ public class PdfServiceImpl extends BaseService implements PdfService {
         log.info("pdf 文件 url [{}]", pdfUrl);
         try {
             if(pdfUrl.startsWith("https:")) {
-                // 创建SSLContext
-                SSLContext sslContext = SSLContext.getInstance("SSL");
-                TrustManager[] tm = { new MyX509TrustManager() };
-                // 初始化
-                sslContext.init(null, tm, new java.security.SecureRandom());
-                // 获取SSLSocketFactory对象
-                SSLSocketFactory ssf = sslContext.getSocketFactory();
-                // url对象
-                URL url = new URL(pdfUrl);
-                // 打开连接
-                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-                conn.setHostnameVerifier(new MyX509TrustManager().new TrustAnyHostnameVerifier());
-                // 设置当前实例使用的SSLSoctetFactory
-                conn.setSSLSocketFactory(ssf);
-                conn.connect();
+//                // 创建SSLContext
+//                SSLContext sslContext = SSLContext.getInstance("SSL");
+//                TrustManager[] tm = { new MyX509TrustManager() };
+//                // 初始化
+//                sslContext.init(null, tm, new java.security.SecureRandom());
+//                // 获取SSLSocketFactory对象
+//                SSLSocketFactory ssf = sslContext.getSocketFactory();
+//                // url对象
+//                URL url = new URL(pdfUrl);
+//                // 打开连接
+//                HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+//                conn.setHostnameVerifier(new MyX509TrustManager().new TrustAnyHostnameVerifier());
+//                conn.setConnectTimeout(6 * 1000);
+//                // 设置当前实例使用的SSLSocketFactory
+//                conn.setSSLSocketFactory(ssf);
+//                conn.connect();
+                // 创建URL对象
+                URL myURL = new URL(pdfUrl);
+                // 创建HttpsURLConnection对象，并设置其SSLSocketFactory对象
+                HttpsURLConnection conn = (HttpsURLConnection) myURL.openConnection();
+                conn.setConnectTimeout(6 * 1000);
                 // 得到输入流
                 inputStream = conn.getInputStream();
             } else {
@@ -236,7 +242,7 @@ public class PdfServiceImpl extends BaseService implements PdfService {
             }
             pdDocument = PDDocument.load(inputStream);
             log.info("获取 pdf 文件成功");
-        } catch (MalformedURLException | NoSuchAlgorithmException | KeyManagementException e) {
+        } catch (MalformedURLException e) {
             throw new BusinessException("001", "无效url获取pdf文件失败");
         } finally {
             if (inputStream != null) {
@@ -251,5 +257,9 @@ public class PdfServiceImpl extends BaseService implements PdfService {
         return pdDocument;
     }
 
+//    public static void main(String[] args) throws IOException {
+//        String url = "https://www.performercn.com/file/demo.pdf";
+//        readPdfFromUrl(url);
+//    }
 
 }
