@@ -1,8 +1,8 @@
 server:
   address: 127.0.0.1
-  port: 8888
+  port: 9002
 #  servlet:
-#    context-path:
+#    context-path: '/ocr/'
   tomcat:
     uri-encoding: UTF-8
 #logging:

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.lang.reflect.InvocationTargetException;
 
 @RestController
-@RequestMapping("/api/admin/permission")
+@RequestMapping("/api/ocr/admin/permission")
 public class AdminPermissionController {
     @Autowired
     PermissionService permissionService;

@@ -21,7 +21,7 @@ import java.io.UnsupportedEncodingException;
  * @Date 2021/01/13
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/ocr")
 @Log4j2
 public class LoginController {
 
