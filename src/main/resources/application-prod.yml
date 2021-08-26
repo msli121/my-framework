@@ -6,4 +6,5 @@ spring:
     password: Ocr@123456
 
 dns:
-  url: https://www.performercn.com
+#  url: https://www.performercn.com
+  url: https://www.passquality.com

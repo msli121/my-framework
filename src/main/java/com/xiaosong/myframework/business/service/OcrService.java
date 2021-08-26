@@ -16,4 +16,6 @@ public interface OcrService {
 
     SysFileEntity getOcrRecognitionResult(String ocrApiUrl, SysFileEntity fileEntity);
 
+    SysFileEntity getOcrRecognitionResultWithout(String ocrApiUrl, SysFileEntity fileEntity);
+
 }

@@ -48,6 +48,12 @@ public class OcrController  extends BaseController {
         return ApiResult.T(recognitionResult);
     }
 
+    @PostMapping("/upload-single/base64-not-save")
+    public ApiResult uploadSinglePictureWithSave(@RequestBody SysFileEntity file) {
+        SysFileEntity recognitionResult = ocrService.getOcrRecognitionResultWithout(ocrApiUrl, file);
+        return ApiResult.T(recognitionResult);
+    }
+
     @PostMapping("/edit-save")
     public ApiResult editAndSaveRecognitionResult(@RequestBody SysFileEntity file) {
         sysFileService.editAndSave(file);

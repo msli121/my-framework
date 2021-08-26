@@ -77,6 +77,25 @@ public class OcrServiceImpl extends BaseService implements OcrService {
         return file;
     }
 
+    @Override
+    public SysFileEntity getOcrRecognitionResultWithout(String ocrApiUrl, SysFileEntity file) {
+        if(StringUtils.isEmpty(file.getFileContent())) {
+            throw new BusinessException("004", "文件内容不能为空");
+        }
+        String base64Str = file.getFileContent();
+        if(base64Str.split(",").length > 1) {
+            base64Str = base64Str.split(",")[1];
+        }
+        // 删除 \r\n
+        base64Str = base64Str.replaceAll("[\\s*\t\n\r]", "");
+        // 调用接口获取识别结果
+        Object recognitionResult = uploadBase64FileToRecognize(ocrApiUrl, base64Str);
+
+        file.setRecognitionContent(JSON.toJSONString(recognitionResult));
+
+        return file;
+    }
+
     private Object uploadBase64FileToRecognize(String ocrApiUrl, String base64Str) {
         HashMap<String, Object> requestBody = new HashMap<>();
         ArrayList<String> images = new ArrayList<>();
