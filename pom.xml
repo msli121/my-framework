@@ -8,10 +8,10 @@
         <version>2.4.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.xiaosong</groupId>
-    <artifactId>my-framework</artifactId>
+    <groupId>com.paradigm</groupId>
+    <artifactId>ocr</artifactId>
     <version>1.0.1</version>
-    <name>my-framework</name>
+    <name>ocr</name>
     <description>a framework for Spring Boot and Vue</description>
     <packaging>jar</packaging>
 
