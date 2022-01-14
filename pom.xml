@@ -11,7 +11,7 @@
     <groupId>com.paradigm</groupId>
     <artifactId>ocr</artifactId>
     <version>1.0.1</version>
-    <name>ocr</name>
+    <name>paradigm-ocr</name>
     <description>a framework for Spring Boot and Vue</description>
     <packaging>jar</packaging>
 

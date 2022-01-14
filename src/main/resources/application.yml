@@ -10,7 +10,7 @@ spring:
     active: dev
 
   application:
-    name: 5paradigm-ocr
+    name: paradigm-ocr
 
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
