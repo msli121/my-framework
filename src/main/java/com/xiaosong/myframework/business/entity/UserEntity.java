@@ -14,7 +14,7 @@ import java.util.Objects;
  */
 
 @Entity
-@Table(name = "t_user", schema = "xiaosong", catalog = "")
+@Table(name = "t_user", schema = "ocr", catalog = "")
 public class UserEntity implements Serializable {
     @Transient
     private static final long serialVersionUID = 1L;

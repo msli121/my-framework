@@ -21,7 +21,7 @@ import java.io.UnsupportedEncodingException;
  * @Date 2021/01/13
  */
 @RestController
-@RequestMapping("/api/ocr")
+@RequestMapping("/api")
 @Log4j2
 public class LoginController {
 
@@ -36,7 +36,7 @@ public class LoginController {
     @PostMapping(value = "/login")
     public ApiResult login(@RequestBody UserEntity user) {
         UserProfileEntity userProfile = loginService.login(user, BusinessConstant.USER_TYPE_PASSWORD);
-        return ApiResult.T("", "登录成功", userProfile);
+        return ApiResult.T("0", "登录成功", userProfile);
     }
 
     /**
@@ -48,7 +48,7 @@ public class LoginController {
     public ApiResult loginByWeChat(@RequestBody WeChatLoginDtoEntity loginDtoEntity) throws UnsupportedEncodingException {
         UserEntity currentUser = loginService.getUserInfoByWeChat(loginDtoEntity);
         UserProfileEntity userProfile = loginService.login(currentUser, BusinessConstant.USER_TYPE_WE_CHAT);
-        return ApiResult.T("", "微信登录成功", userProfile);
+        return ApiResult.T("0", "微信登录成功", userProfile);
     }
 
     /**
@@ -64,7 +64,7 @@ public class LoginController {
         loginService.passwordRegistry(user);
         // 新用户登录
         UserProfileEntity userProfile = loginService.login(requestUser, BusinessConstant.USER_TYPE_PASSWORD);
-        return ApiResult.T("", "注册成功", userProfile);
+        return ApiResult.T("0", "注册成功", userProfile);
     }
 
     /**
@@ -73,7 +73,7 @@ public class LoginController {
      */
     @GetMapping(value = "/authentication")
     public ApiResult authentication(){
-        return ApiResult.T("", "身份认证成功");
+        return ApiResult.T("0", "身份认证成功");
     }
 
     /**
@@ -84,6 +84,6 @@ public class LoginController {
     public ApiResult logout() {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
-        return ApiResult.T("", "退出登录");
+        return ApiResult.T("0", "退出登录");
     }
 }

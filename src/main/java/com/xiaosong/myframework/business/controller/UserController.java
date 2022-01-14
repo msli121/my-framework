@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.io.UnsupportedEncodingException;
 
 @RestController
-@RequestMapping("/api/ocr/user")
+@RequestMapping("/api/user")
 public class UserController {
+
     @Autowired
     UserService userService;
 

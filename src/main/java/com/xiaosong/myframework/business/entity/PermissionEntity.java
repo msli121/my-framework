@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "t_permission", schema = "xiaosong", catalog = "")
+@Table(name = "t_permission", schema = "ocr", catalog = "")
 public class PermissionEntity implements Serializable {
     @Transient
     private static final long serialVersionUID = 1L;

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/ocr/admin/role")
+@RequestMapping("/api/admin/role")
 public class AdminRoleController {
     @Autowired
     RoleService roleService;

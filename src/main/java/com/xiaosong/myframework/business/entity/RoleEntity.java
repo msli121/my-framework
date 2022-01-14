@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-@Table(name = "t_role", schema = "xiaosong", catalog = "")
+@Table(name = "t_role", schema = "ocr", catalog = "")
 public class RoleEntity implements Serializable {
     @Transient
     private static final long serialVersionUID = 1L;

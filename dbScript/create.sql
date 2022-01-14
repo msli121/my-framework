@@ -14,7 +14,7 @@ create table `t_role` (
     `role_name` varchar(255) not null,
     `enabled` varchar(10) default '1',
     `description` varchar(255) default null
-) ENGINE=InnoDB auto_increment=1 default charset=utf8;
+) ENGINE=InnoDB auto_increment=1 default charset=utf8mb4;
 
 # 用户表
 drop table if exists `t_user`;
@@ -41,7 +41,7 @@ create table `t_user` (
     `head_img_url`  varchar(255) default '' comment '微信用户头像',
     `enabled` varchar(10) default '1',
     `locked` varchar(10) default '0'
-) ENGINE=InnoDB auto_increment=1 default charset=utf8;
+) ENGINE=InnoDB auto_increment=1 default charset=utf8mb4;
 
 # 角色用户关联表
 drop table if exists `t_user_role`;
@@ -50,7 +50,7 @@ create table `t_user_role`(
     `user_id` int(11) not null,
     `role_code` varchar(255) default '',
     `description` varchar(255) default null
-)ENGINE=InnoDB auto_increment=1 default charset=utf8;
+)ENGINE=InnoDB auto_increment=1 default charset=utf8mb4;
 
 # 菜单表
 drop table if exists `t_menu`;
@@ -64,7 +64,7 @@ create table `t_menu` (
     `component` varchar(255) default null,
     `parent_menu_code` varchar(255) default null,
     `description` varchar(255) default null
-)  ENGINE=InnoDB auto_increment=1 default charset=utf8;
+)  ENGINE=InnoDB auto_increment=1 default charset=utf8mb4;
 
 # 角色菜单关联表
 drop table if exists `t_role_menu`;
@@ -73,7 +73,7 @@ create table `t_role_menu` (
     `role_code` varchar(255) default '',
     `menu_code` varchar(255) default '',
     `description` varchar(255) default null
-) ENGINE=InnoDB auto_increment=1 default charset=utf8;
+) ENGINE=InnoDB auto_increment=1 default charset=utf8mb4;
 
 # 系统默认角色
 insert into t_role(role_name, role_code, description) values ('role_admin', 'ROLE_ADMIN', '管理员角色');
@@ -131,7 +131,7 @@ create table `t_permission` (
     `url` varchar(255) default '',
     `enabled` varchar(10) default '1',
     `description` varchar(255) default ''
-)ENGINE=InnoDB auto_increment=1 default charset=utf8;
+)ENGINE=InnoDB auto_increment=1 default charset=utf8mb4;
 # 添加测试数据
 insert into t_permission(group_code, permission_code, name_zh, parent_permission_code, url, description)
        values ('admin', 'PERMISSION_ADMIN', '后台权限', '', '/api/admin', '系统后台权限'),
@@ -164,7 +164,7 @@ create table `t_role_permission` (
     `role_code` varchar(255) default '',
     `permission_code` varchar(255) default '',
     `description` varchar(255) default ''
-)ENGINE=InnoDB auto_increment=1 default charset=utf8;
+)ENGINE=InnoDB auto_increment=1 default charset=utf8mb4;
 
 # 添加测试数据
 # insert into t_role_permission(role_code, permission_code, description)
@@ -204,7 +204,7 @@ create table `t_sys_file` (
     `source_group` varchar(50) default '' comment '文件源分组，如avatar,ocr,pdf',
     `star` tinyint(1) default 0 comment '文件是否收藏，0为收藏，1收藏',
     `upload_time` timestamp not null default NOW() comment '上传时间'
-)ENGINE=InnoDB auto_increment=1 default charset=utf8;
+)ENGINE=InnoDB auto_increment=1 default charset=utf8mb4;
 
 
 

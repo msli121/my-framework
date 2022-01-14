@@ -14,7 +14,7 @@ import java.util.Objects;
  */
 
 @Entity
-@Table(name = "t_sys_file", schema = "xiaosong", catalog = "")
+@Table(name = "t_sys_file", schema = "ocr", catalog = "")
 
 public class SysFileEntity implements Serializable {
     @Transient

@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author msl
  */
 //@EnableCaching
-@SpringBootApplication
 //@EnableTransactionManagement(proxyTargetClass = true)
+@SpringBootApplication
 public class MyFrameworkApplication {
 
     public static void main(String[] args) {

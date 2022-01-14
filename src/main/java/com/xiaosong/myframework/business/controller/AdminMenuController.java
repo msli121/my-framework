@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/ocr/admin/menu")
+@RequestMapping("/api/admin/menu")
 public class AdminMenuController {
     @Autowired
     MenuService menuService;

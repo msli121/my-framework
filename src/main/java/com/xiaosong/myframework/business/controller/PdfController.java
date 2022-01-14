@@ -19,7 +19,7 @@ import java.util.Map;
  * @Date 2021/01/26
  */
 @RestController
-@RequestMapping("/api/ocr/pdf")
+@RequestMapping("/api/pdf")
 @Log4j2
 public class PdfController extends BaseController {
 

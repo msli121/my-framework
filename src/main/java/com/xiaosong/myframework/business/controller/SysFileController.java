@@ -19,7 +19,7 @@ import java.sql.Timestamp;
  * @Date 2021/01/04
  */
 @RestController
-@RequestMapping("/api/ocr/file")
+@RequestMapping("/api/file")
 @Log4j2
 public class SysFileController extends BaseController {
 

@@ -1,17 +1,23 @@
 server:
-  address: 127.0.0.1
-  port: 9002
-#  servlet:
-#    context-path: '/ocr/'
-  tomcat:
-    uri-encoding: UTF-8
-#logging:
-#  config: classpath:log4j2.xml
+  port: 10001
+  servlet:
+    context-path: /${spring.application.name}
+# 日志相关
+logging:
+  config: classpath:logback.xml
 spring:
   profiles:
     active: dev
+
   application:
-    name: ocr-backend
+    name: 5paradigm-ocr
+
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://47.100.223.110:3306/ocr?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: ocr
+    password: ocr8888
+
   thymeleaf:
     cache: true
     check-template: true
@@ -29,6 +35,7 @@ spring:
       max-file-size: 20MB
       max-request-size: 50MB
       resolve-lazily: false
+
   jpa:
     show-sql: true
     database: mysql
@@ -40,6 +47,7 @@ spring:
 ocr:
 #  url: http://47.117.127.63:8868/predict/ocr_system
 #  url: http://47.117.127.63:8868/predict/ocr_v50
+#  url: http://101.132.24.161:80/predict/ocr_v50
   url: http://101.132.24.161:80/predict/ocr_v50
   appId: wx32e95d3c6fbe4913
   appSecret: e46c212fb7e9fd121dedfab4c0942d21
